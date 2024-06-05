@@ -96,15 +96,31 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		//メッセージなし
 		else
 		{
+			//Cameraの更新
+			Camera::Update();
+
 			//ゲームの処理
 
 			Direct3D::BeginDraw();
 
-			//Cameraの更新
-			Camera::Update();
-
 			//自前の描画処理をここに追加
-			XMMATRIX mat = XMMatrixRotationY(XMConvertToRadians(45));
+			/*static float rot = 0;
+			rot += 0.1f;
+			XMMATRIX rmat = XMMatrixRotationY(XMConvertToRadians(rot));
+			static float factor = 0.0f;
+			factor += 0.01f;
+			float scale = 1.5 + sin(factor);
+			XMMATRIX smat = XMMatrixScaling(scale,scale,scale);
+			XMMATRIX mat = rmat;*/
+			static float rot = 0;
+			rot += 0.1f;
+			XMMATRIX rmat = XMMatrixRotationY(XMConvertToRadians(rot));
+			static float factor = 0.0f;
+			factor += 0.002f;
+			XMMATRIX tmat = XMMatrixTranslation(3.0f*sin(factor), cos(factor), 1.0f);
+			//単位行列
+			XMMATRIX mat = XMMatrixIdentity();//Identity　意味　単位行列
+			mat = rmat * tmat;
 			q->Draw(mat);
 
 			//描画処理

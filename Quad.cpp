@@ -11,7 +11,7 @@ Quad::~Quad()
 
 HRESULT Quad::Initialize()
 {
-	//// 頂点情報
+	// 頂点情報
 	XMVECTOR vertices[] =//四角
 	{
 		XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f),	// 四角形の頂点（左上）
@@ -131,7 +131,7 @@ void Quad::Draw(XMMATRIX& worldMatrix)
 	//Direct3D::pContext->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
 	//memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
 	//Direct3D::pContext->Unmap(pConstantBuffer_, 0);	//再開
-#if 1
+
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	CONSTANT_BUFFER cb;
 
@@ -139,7 +139,7 @@ void Quad::Draw(XMMATRIX& worldMatrix)
 	Direct3D::pContext->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのリソースアクセスを一時止める
 	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
 	Direct3D::pContext->Unmap(pConstantBuffer_, 0);	//再開
-#endif
+
 	//頂点バッファ
 	UINT stride = sizeof(XMVECTOR);
 	UINT offset = 0;
