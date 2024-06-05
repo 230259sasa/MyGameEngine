@@ -2,6 +2,8 @@
 #include"Camera.h"
 
 Quad::Quad()
+	:pVertexBuffer_(nullptr),pIndexBuffer_(nullptr),pConstantBuffer_(nullptr),
+	pTexture_(nullptr)
 {
 }
 
@@ -12,12 +14,12 @@ Quad::~Quad()
 HRESULT Quad::Initialize()
 {
 	// 頂点情報
-	XMVECTOR vertices[] =//四角
+	VERTEX vertices[] =//四角
 	{
-		XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f),	// 四角形の頂点（左上）
-		XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f),	// 四角形の頂点（右上）
-		XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),	// 四角形の頂点（右下）
-		XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),	// 四角形の頂点（左下）
+		{XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f),XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f) },	// 四角形の頂点（左上）
+		{XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f),XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f) },	// 四角形の頂点（右上）
+		{XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f) },	// 四角形の頂点（右下）
+		{XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f) },	// 四角形の頂点（左下）
 	};
 
 	//// 頂点情報
@@ -113,6 +115,9 @@ HRESULT Quad::Initialize()
 	}
 	//Direct3D::pDevice->CreateBuffer(&cb, nullptr, &pConstantBuffer_);
 
+	pTexture_ = new Texture;
+	pTexture_->Load("Assets\\dice.png");
+
 	return S_OK;
 }
 
@@ -146,13 +151,19 @@ void Quad::Draw(XMMATRIX& worldMatrix)
 	Direct3D::pContext->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);
 
 	// インデックスバッファーをセット
-	stride = sizeof(int);
+	stride = sizeof(VERTEX);
 	offset = 0;
 	Direct3D::pContext->IASetIndexBuffer(pIndexBuffer_, DXGI_FORMAT_R32_UINT, 0);
 
 	//コンスタントバッファ
 	Direct3D::pContext->VSSetConstantBuffers(0, 1, &pConstantBuffer_);	//頂点シェーダー用	
 	Direct3D::pContext->PSSetConstantBuffers(0, 1, &pConstantBuffer_);	//ピクセルシェーダー用
+
+	ID3D11SamplerState* pSampler = pTexture_->GetSampler();
+	Direct3D::pContext->PSSetSamplers(0, 1, &pSampler);
+
+	ID3D11ShaderResourceView* pSRV = pTexture_->GetSRV();
+	Direct3D::pContext->PSSetShaderResources(0, 1, &pSRV);
 
 	Direct3D::pContext->DrawIndexed(50, 0, 0);
 }
@@ -162,5 +173,6 @@ void Quad::Release()
 	SAFE_RELEASE(pConstantBuffer_);
 	SAFE_RELEASE(pIndexBuffer_);
 	SAFE_RELEASE(pVertexBuffer_);
+	SAFE_RELEASE(pTexture_);
 }
 
