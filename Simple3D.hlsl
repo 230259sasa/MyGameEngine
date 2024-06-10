@@ -5,12 +5,12 @@ Texture2D g_texture : register(t0); //テクスチャー
 SamplerState g_sampler : register(s0); //サンプラー
 
 //───────────────────────────────────────
-// コンスタントバッファ
+ // コンスタントバッファ
 // DirectX 側から送信されてくる、ポリゴン頂点以外の諸情報の定義
 //───────────────────────────────────────
 cbuffer global
 {
-    //  変換行列　視点　光源
+    //変換行列、視点、光源
     float4x4 matWVP; // ワールド・ビュー・プロジェクションの合成行列
 };
 
@@ -35,7 +35,6 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 	//スクリーン座標に変換し、ピクセルシェーダーへ
     outData.pos = mul(pos, matWVP);
     outData.uv = uv;
-    
 	//まとめて出力
     return outData;
 }
@@ -45,5 +44,6 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
+    //return float4(65 / 255.0, 105 / 255.0, 225 / 255.0, 1); //ピクセルを塗る色
     return g_texture.Sample(g_sampler, inData.uv);
 }

@@ -1,21 +1,22 @@
 //インクルード
 #include <Windows.h>
-#include<tchar.h>
-#include <Windows.h>
 #include "Direct3D.h"
-#include"Quad.h"
-#include"Camera.h"
 
-// MicroSoft Disk Operating System
-// ハイレベルシェーダ
+#include "Quad.h"
+#include "Camera.h"
+
+//リンカ
+#pragma comment(lib, "d3d11.lib")
+
+
+	//定数宣言
+	const wchar_t* WIN_CLASS_NAME = L"SampleGame";  //ウィンドウクラス名
+	const wchar_t* APP_NAME = L"サンプルゲーム"; //アプリケーション名
+	const int WINDOW_WIDTH = 800;
+	const int WINDOW_HEIGHT = 600;
+
 //プロトタイプ宣言
-
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-const wchar_t* WIN_CLASS_NAME = L"SampleGame";
-const wchar_t* APP_NAME = L"サンプルゲーム";
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
 
 //エントリーポイント
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
@@ -24,7 +25,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	WNDCLASSEX wc;
 	wc.cbSize = sizeof(WNDCLASSEX);             //この構造体のサイズ
 	wc.hInstance = hInstance;                   //インスタンスハンドル
-	wc.lpszClassName = L"SampleGame";            //ウィンドウクラス名
+	wc.lpszClassName = WIN_CLASS_NAME;            //ウィンドウクラス名
 	wc.lpfnWndProc = WndProc;                   //ウィンドウプロシージャ
 	wc.style = CS_VREDRAW | CS_HREDRAW;         //スタイル（デフォルト）
 	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION); //アイコン
@@ -37,20 +38,21 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	RegisterClassEx(&wc); //クラスを登録
 
 	//ウィンドウサイズの計算
-	RECT winRect = { 0,0,WINDOW_WIDTH,WINDOW_HEIGHT };
+//（表示領域をWINDOW_WIDTHxWINDOW_HEIGHTに指定するための計算）
+	RECT winRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 	AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
-	int winW = winRect.right - winRect.left;
-	int winH = winRect.bottom - winRect.top;
+	int winW = winRect.right - winRect.left;     //ウィンドウ幅
+	int winH = winRect.bottom - winRect.top;     //ウィンドウ高さ
 
 	//ウィンドウを作成
 	HWND hWnd = CreateWindow(
-		WIN_CLASS_NAME,		 //ウィンドウクラス名
-		APP_NAME,			 //タイトルバーに表示する内容
+		WIN_CLASS_NAME,         //ウィンドウクラス名
+		APP_NAME,				//タイトルバーに表示する内容
 		WS_OVERLAPPEDWINDOW, //スタイル（普通のウィンドウ）
 		CW_USEDEFAULT,       //表示位置左（おまかせ）
 		CW_USEDEFAULT,       //表示位置上（おまかせ）
-		WINDOW_WIDTH,                 //ウィンドウ幅
-		WINDOW_HEIGHT,                 //ウィンドウ高さ
+		winW,        //ウィンドウ幅
+		winH,       //ウィンドウ高さ
 		NULL,                //親ウインドウ（なし）
 		NULL,                //メニュー（なし）
 		hInstance,           //インスタンス
@@ -59,16 +61,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
 	//ウィンドウを表示
 	ShowWindow(hWnd, nCmdShow);
-
 	//Direct3D初期化
 	HRESULT hr = Direct3D::Initialize(winW, winH, hWnd);
 	if (FAILED(hr))
 	{
-		MessageBox(NULL, L"Direct3Dの初期化に失敗", NULL, MB_OK);
+		MessageBox(NULL, L"DirectXの初期化に失敗", NULL, MB_OK);
 		return 0;
 	}
 
-	//Camera初期化
 	Camera::Initialize();
 
 	Quad* q;
@@ -76,10 +76,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	hr = q->Initialize();
 	if (FAILED(hr))
 	{
-		MessageBox(NULL, L"Quadの生成に失敗", NULL, MB_OK);
+		MessageBox(NULL, L"Quadの初期化に失敗", NULL, MB_OK);
 		return 0;
 	}
-	q->Initialize();
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -96,41 +95,38 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		//メッセージなし
 		else
 		{
-			//Cameraの更新
+			//カメラを更新
 			Camera::Update();
 
 			//ゲームの処理
-
 			Direct3D::BeginDraw();
 
-			//自前の描画処理をここに追加
-			/*static float rot = 0;
-			rot += 0.1f;
-			XMMATRIX rmat = XMMatrixRotationY(XMConvertToRadians(rot));
-			static float factor = 0.0f;
-			factor += 0.01f;
-			float scale = 1.5 + sin(factor);
-			XMMATRIX smat = XMMatrixScaling(scale,scale,scale);
-			XMMATRIX mat = rmat;*/
+			//1度ずつ回転するための変数
 			static float rot = 0;
-			rot += 0.1f;
-			XMMATRIX rmat = XMMatrixRotationY(XMConvertToRadians(rot));
-			static float factor = 0.0f;
-			factor += 0.002f;
-			XMMATRIX tmat = XMMatrixTranslation(3.0f*sin(factor), cos(factor), 1.0f);
-			//単位行列
-			XMMATRIX mat = XMMatrixIdentity();//Identity　意味　単位行列
-			mat = rmat * tmat;
+			rot += 0.001;
+			
+			XMMATRIX rmat = XMMatrixRotationY(rot);
+
+			static float factor = 0.0;
+			//factor += 0.001;
+
+			//////ここに自前の描画処理を追加していく
+			XMMATRIX tmat = XMMatrixTranslation(3.0 * cos(factor), 3.0 * sin(factor), 0);
+
+			//単位行列は、数字の１と同じ
+			XMMATRIX mat = XMMatrixIdentity();//Identity 単位行列
+			mat = rmat*tmat;
 			q->Draw(mat);
 
 			//描画処理
-
 			Direct3D::EndDraw();
 		}
+		
 	}
 
 	SAFE_DELETE(q);
 	Direct3D::Release();
+
 	return 0;
 }
 
