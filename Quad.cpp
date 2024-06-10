@@ -24,26 +24,41 @@ HRESULT Quad::Initialize()
 
 	VERTEX vertices[] =
 	{
-		{ XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(0.0, 0.0, 0.0, 0.0)},	// サイコロ　左上
-		{ XMVectorSet( 1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(1.0, 0.0, 0.0, 0.0)},	// サイコロ　右上
-		{ XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f),  XMVectorSet(1.0, 0.0, 1.0, 0.0)},	// サイコロ　右奥上
-		{ XMVectorSet(-1.0f, 1.0f, 2.0f, 0.0f), XMVectorSet(0.0, 0.0, 1.0, 0.0)},	// サイコロ　左奥上
-		{ XMVectorSet(-1.0f, -1.0f, 2.0f, 0.0f),  XMVectorSet(0.0,1.0, 1.0, 0.0)},	// サイコロ　左奥下
-		{ XMVectorSet(1.0f, -1.0f, 2.0f, 0.0f),  XMVectorSet(1.0, 1.0, 1.0, 0.0)},	// サイコロ　右奥下
-		{ XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),  XMVectorSet(1.0, 1.0, 0.0, 0.0)},	// サイコロ　右下
-		{ XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f),  XMVectorSet(0.0, 1.0, 0.0, 0.0)},	// サイコロ　左下
+		//正面　１
+		{ XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(0.0, 0.0, 0.0, 0.0)},	// 四角形の頂点（左上
+		{ XMVectorSet( 1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(0.25, 0.0, 0.0, 0.0)},	// 四角形の頂点（右上）, UV
+		{ XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),  XMVectorSet(0.25, 0.5, 0.0, 0.0)},	// 四角形の頂点（右下）, UV
+		{ XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f), XMVectorSet(0.0, 0.5, 0.0, 0.0)},	// 四角形の頂点（左下）, UV
+		//後ろ　6
+		{ XMVectorSet(-1.0f,  1.0f, 2.0f, 0.0f), XMVectorSet(0.25, 0.5, 0.0, 0.0)},	// 四角形の頂点（左上
+		{ XMVectorSet(1.0f,  1.0f, 2.0f, 0.0f), XMVectorSet(0.5, 0.5, 0.0, 0.0)},	// 四角形の頂点（右上）, UV
+		{ XMVectorSet(1.0f, -1.0f, 2.0f, 0.0f),  XMVectorSet(0.5, 1.0, 0.0, 0.0)},	// 四角形の頂点（右下）, UV
+		{ XMVectorSet(-1.0f, -1.0f, 2.0f, 0.0f), XMVectorSet(0.25, 1.0, 0.0, 0.0)},	// 四角形の頂点（左下）, UV
+		//migi 3
+		{ XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(0.5, 0.0, 0.0, 0.0)},	// 四角形の頂点（右上）, UV
+		{ XMVectorSet(1.0f,  1.0f, 2.0f, 0.0f), XMVectorSet(0.75, 0.0, 0.0, 0.0)},	// 四角形の頂点（右oku上）, UV
+		{ XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),  XMVectorSet(0.5, 0.5, 0.0, 0.0)},	// 四角形の頂点（右下）, UV
+		{ XMVectorSet(1.0f, -1.0f, 2.0f, 0.0f),  XMVectorSet(0.75, 0.5, 0.0, 0.0)},	// 四角形の頂点（右oku下）, UV
+		//hidari 4
+		{ XMVectorSet(-1.0f,  1.0f, 2.0f, 0.0f), XMVectorSet(0.75, 0.0, 0.0, 0.0)},	// 四角形の頂点（左oku上
+		{ XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(1.0, 0.0, 0.0, 0.0)},	// 四角形の頂点（左上
+		{ XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f), XMVectorSet(1.0, 0.5, 0.0, 0.0)},	// 四角形の頂点（左下）, UV
+		{ XMVectorSet(-1.0f, -1.0f, 2.0f, 0.0f), XMVectorSet(0.75, 0.5, 0.0, 0.0)},	// 四角形の頂点（左oku下）, UV
+		//ue 5
+		{ XMVectorSet(-1.0f,  1.0f, 2.0f, 0.0f), XMVectorSet(0.0, 0.5, 0.0, 0.0)},	// 四角形の頂点（左oku上
+		{ XMVectorSet(1.0f,  1.0f, 2.0f, 0.0f), XMVectorSet(0.25, 0.5, 0.0, 0.0)},	// 四角形の頂点（右oku上）, UV
+		{ XMVectorSet(1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(0.25, 1.0, 0.0, 0.0)},	// 四角形の頂点（右上）, UV
+		{ XMVectorSet(-1.0f,  1.0f, 0.0f, 0.0f), XMVectorSet(0.0, 1.0, 0.0, 0.0)},	// 四角形の頂点（左上
+		//sita 2
+		{ XMVectorSet(-1.0f, -1.0f, 0.0f, 0.0f), XMVectorSet(0.25, 0.0, 0.0, 0.0)},	// 四角形の頂点（左下）, UV
+		{ XMVectorSet(1.0f, -1.0f, 0.0f, 0.0f),  XMVectorSet(0.5, 0.0, 0.0, 0.0)},	// 四角形の頂点（右下）, UV
+		{ XMVectorSet(1.0f, -1.0f, 2.0f, 0.0f),  XMVectorSet(0.5, 0.5, 0.0, 0.0)},	// 四角形の頂点（右oku下）, UV
+		{ XMVectorSet(-1.0f, -1.0f, 2.0f, 0.0f), XMVectorSet(0.25, 0.5, 0.0, 0.0)},	// 四角形の頂点（左oku下）, UV
 	};
-	//0 1
-	//7 6
-
-	//3 2
-	//4 5
 
 	//インデックス情報
-	//int index[] = { 0,1,2, 0,3,2, 0,1,6, 0,6,7, 2,3,4, 2,4,5, 0,3,4, 0,7,4, 1,6,5, 1,2,5, 4,5,6, 4,7,6 };
-	//int index[] = { 0,6,7, 0,1,6, 2,4,5, 2,3,4, 1,2,5, 1,5,6, 3,0,7, 3,7,4, 0,1,2, 0,2,3, 4,6,7, 4,5,6};
-	int index[] = { 0,1,6, 0,6,7 };
-
+	int index[] = { 0,1,2, 0,2,3, 6,5,4, 7,6,4, 8,9,10, 11,10,9, 12,13,14, 12,14,15, 16,17,18, 16,18,19, 20,21,22, 20,22,23};
+	
 	// 頂点データ用バッファの設定
 	D3D11_BUFFER_DESC bd_vertex;
 	bd_vertex.ByteWidth = sizeof(vertices);

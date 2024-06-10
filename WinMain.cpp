@@ -106,6 +106,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			rot += 0.001;
 			
 			XMMATRIX rmat = XMMatrixRotationY(rot);
+			XMMATRIX xmat = XMMatrixRotationX(rot);
 
 			static float factor = 0.0;
 			//factor += 0.001;
@@ -115,7 +116,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
 			//単位行列は、数字の１と同じ
 			XMMATRIX mat = XMMatrixIdentity();//Identity 単位行列
-			mat = rmat*tmat;
+			mat = xmat*rmat*tmat;
 			q->Draw(mat);
 
 			//描画処理
