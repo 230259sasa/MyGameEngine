@@ -4,6 +4,7 @@
 
 #include "Quad.h"
 #include "Camera.h"
+#include "Dice.h"
 
 //リンカ
 #pragma comment(lib, "d3d11.lib")
@@ -69,11 +70,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		return 0;
 	}
 
+	
+	//Camera::Initialize({5,10,-10}, {0,0,0});
 	Camera::Initialize();
 
-	Quad* q;
-	q = new Quad();
-	hr = q->Initialize();
+	//Quad* q;
+	//q = new Quad();
+	Dice* d;
+	d = new Dice();
+
+	//hr = q->Initialize();
+	hr = d->Initialize();
+
 	if (FAILED(hr))
 	{
 		MessageBox(NULL, L"Quadの初期化に失敗", NULL, MB_OK);
@@ -104,20 +112,25 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//1度ずつ回転するための変数
 			static float rot = 0;
 			rot += 0.001;
+			//radian -> digree XMConvertToRadians
+			//digree -> radian XMConvertToDegrees
 			
-			XMMATRIX rmat = XMMatrixRotationY(rot);
-			XMMATRIX xmat = XMMatrixRotationX(rot);
+			XMMATRIX rmat = XMMatrixRotationX(rot);
+			XMMATRIX zmat = XMMatrixRotationZ(rot);
 
 			static float factor = 0.0;
-			//factor += 0.001;
-
+			factor += 0.001;
+			////float scale = 1.5 + sin(factor);
+			////XMMATRIX smat = XMMatrixScaling(scale, scale, scale);
 			//////ここに自前の描画処理を追加していく
-			XMMATRIX tmat = XMMatrixTranslation(3.0 * cos(factor), 3.0 * sin(factor), 0);
-
+			////XMMATRIX tmat = XMMatrixTranslation(2.0*sin(factor), 0, 0);
+			XMMATRIX tmat = XMMatrixTranslation(3.0*cos(factor), 3.0*sin(factor), 0);
+			//XMMATRIX mat = smat * rmat * tmat;
 			//単位行列は、数字の１と同じ
-			XMMATRIX mat = XMMatrixIdentity();//Identity 単位行列
-			mat = xmat*rmat*tmat;
-			q->Draw(mat);
+			XMMATRIX mat = XMMatrixIdentity();//Identityは単位行列って意味
+			mat = rmat*zmat;
+			//q->Draw(mat);
+			d->Draw(mat);
 
 			//描画処理
 			Direct3D::EndDraw();
@@ -125,7 +138,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		
 	}
 
-	SAFE_DELETE(q);
+	//SAFE_DELETE(q);
 	Direct3D::Release();
 
 	return 0;

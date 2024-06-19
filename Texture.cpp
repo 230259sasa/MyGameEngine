@@ -13,12 +13,13 @@ Texture::Texture()
 
 HRESULT Texture::Load(string fileName)
 {
+
 	TexMetadata metadata; //画像の付属情報
 	ScratchImage image;   //画像本体
 
 	HRESULT hr = S_OK;
 
-	//実際に読み込む
+	//実際に読んでゆくぅ　　　　　 
 	std::wstring wstr(fileName.begin(), fileName.end()); //string => wchar_t* の変換　LPCWSTR == cont wchar_t*
 	hr = LoadFromWICFile(wstr.c_str(), WIC_FLAGS::WIC_FLAGS_NONE, &metadata, image);
 
@@ -27,7 +28,7 @@ HRESULT Texture::Load(string fileName)
 		return S_FALSE;
 	}
 
-	//サンプラーの設定
+	//サンプラーの設定をしてゆくぅ
 	D3D11_SAMPLER_DESC  SamDesc;
 	ZeroMemory(&SamDesc, sizeof(D3D11_SAMPLER_DESC));
 	SamDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
