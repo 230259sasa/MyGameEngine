@@ -5,7 +5,8 @@
 #include "Quad.h"
 #include "Camera.h"
 #include "Dice.h"
-
+#include "Sprite.h"
+#include"Transform.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
 
@@ -78,9 +79,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	//q = new Quad();
 	Dice* d;
 	d = new Dice();
+	Sprite* pSprite;
+	pSprite = new Sprite();
 
 	//hr = q->Initialize();
-	hr = d->Initialize();
+	//hr = d->Initialize();
+	hr = pSprite->Load("Assets\\dice.png");
 
 	if (FAILED(hr))
 	{
@@ -106,31 +110,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//カメラを更新
 			Camera::Update();
 
-			//ゲームの処理
-			Direct3D::BeginDraw();
-
-			//1度ずつ回転するための変数
-			static float rot = 0;
-			rot += 0.001;
-			//radian -> digree XMConvertToRadians
-			//digree -> radian XMConvertToDegrees
-			
-			XMMATRIX rmat = XMMatrixRotationX(rot);
-			XMMATRIX zmat = XMMatrixRotationZ(rot);
-
-			static float factor = 0.0;
-			factor += 0.001;
-			////float scale = 1.5 + sin(factor);
-			////XMMATRIX smat = XMMatrixScaling(scale, scale, scale);
-			//////ここに自前の描画処理を追加していく
-			////XMMATRIX tmat = XMMatrixTranslation(2.0*sin(factor), 0, 0);
-			XMMATRIX tmat = XMMatrixTranslation(3.0*cos(factor), 3.0*sin(factor), 0);
-			//XMMATRIX mat = smat * rmat * tmat;
-			//単位行列は、数字の１と同じ
-			XMMATRIX mat = XMMatrixIdentity();//Identityは単位行列って意味
-			mat = rmat*zmat;
-			//q->Draw(mat);
-			d->Draw(mat);
+			//XMMATRIX mat = XMMatrixScaling(1 / 2);
+			Transform trs;
+			trs.rotate_.z = 45;
+			trs.position_.x += 0.1;
+			trs.scale_ = { 0.5, 0.5, 1 };
+			pSprite->Draw(trs);
 
 			//描画処理
 			Direct3D::EndDraw();

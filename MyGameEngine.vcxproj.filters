@@ -29,6 +29,12 @@
     <ClCompile Include="Dice.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct3D.h">
@@ -46,9 +52,12 @@
     <ClInclude Include="Dice.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="simple3D.hlsl" />
+    <FxCompile Include="Simple2D.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -15,8 +15,14 @@ namespace Direct3D
 	ID3D11PixelShader* pPixelShader = nullptr;		//ピクセルシェーダー
 	ID3D11InputLayout* pVertexLayout = nullptr;	//頂点インプットレイアウト
 	ID3D11RasterizerState* pRasterizerState = nullptr;	//ラスタライザー
+	struct SHADER_BUNDLE {
+		ID3D11VertexShader* pVertexShader = nullptr;	//頂点シェーダー
+		ID3D11PixelShader* pPixelShader = nullptr;		//ピクセルシェーダー
+		ID3D11InputLayout* pVertexLayout = nullptr;	//頂点インプットレイアウト
+		ID3D11RasterizerState* pRasterizerState = nullptr;	//ラスタライザー
+	};
+	SHADER_BUNDLE shaderBundle[SHADER_MAX];
 }
-
 
 
 //初期化
@@ -194,7 +200,7 @@ HRESULT Direct3D::InitShader()
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, sizeof(DirectX::XMVECTOR) , D3D11_INPUT_PER_VERTEX_DATA, 0 },//UV座標
 		{ "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(DirectX::XMVECTOR) * 2 ,	D3D11_INPUT_PER_VERTEX_DATA, 0 },//法線
 	};
-	hr = pDevice->CreateInputLayout(layout,2, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
+	hr = pDevice->CreateInputLayout(layout, 2, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &pVertexLayout);
 
 	pCompileVS->Release();
 	if (FAILED(hr))
@@ -237,17 +243,30 @@ HRESULT Direct3D::InitShader()
 	return S_OK;
 }
 
+HRESULT Direct3D::InitShader3D()
+{
+
+}
+
+HRESULT Direct3D::InitShader2D()
+{
+
+}
+
+void Direct3D::SetShader(SHADER_TYPE type)
+{
+
+}
+
 //描画開始
 void Direct3D::BeginDraw()
 {
 	//背景の色
-	float clearColor[4] = { 255/255.0f, 250/255.0f, 205/255.0f, 1.0f };//R,G,B,A
+	float clearColor[4] = { 255 / 255.0f, 250 / 255.0f, 205 / 255.0f, 1.0f };//R,G,B,A
 
 	//画面をクリア
 	pContext->ClearRenderTargetView(pRenderTargetView, clearColor);
 }
-
-
 
 //描画終了
 

@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 #include "Texture.h"
 #include<vector>
+#include"Transform.h"
 
 using namespace DirectX;
 
@@ -36,8 +37,8 @@ private:
 public:
 	Sprite();
 	~Sprite();
-	HRESULT Initialize();
-	virtual void Draw(XMMATRIX& worldMatrix);
+	HRESULT Load(std::string fileName);
+	virtual void Draw(Transform& transform);//const + &Ç≈à¯êîÇïœçXÇµÇ»Ç¢
 	void Release();
 private:
 	void InitVertexData();
@@ -48,8 +49,8 @@ private:
 
 	HRESULT CreateConstantBuffer();
 
-	HRESULT LoadTexture();
-	void PassDataToCB(DirectX::XMMATRIX& worldMatrix);
+	HRESULT LoadTexture(std::string fineName);
+	void PassDataToCB(DirectX::XMMATRIX worldMatrix);
 	void SetBufferToPipeline();
 };
 
