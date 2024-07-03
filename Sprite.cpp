@@ -39,6 +39,7 @@ HRESULT Sprite::Load(std::string fineName)
 
 void Sprite::Draw(Transform& transform)
 {
+	Direct3D::SetShader(SHADER_TYPE::SHADER_2D);
 	transform.Calculation();
 	PassDataToCB(transform.GetWorldMatrix());
 	SetBufferToPipeline();
@@ -82,12 +83,12 @@ HRESULT Sprite::CreateVertexBuffer()
 	//hr = E_FAIL;
 	if (FAILED(hr))
 	{
-		int MessageBox(
+		/*int MessageBox(
 			[in, optional] HWND    hWnd,
 			[in, optional] LPCTSTR lpText,
 			[in, optional] LPCTSTR lpCaption,
 			[in]           UINT    uType
-		);
+		);*/
 		MessageBox(NULL, L"頂点バッファの作成に失敗", NULL, MB_OK);
 		return hr;
 	}

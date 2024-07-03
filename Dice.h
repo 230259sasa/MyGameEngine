@@ -7,9 +7,11 @@ class Dice :
 {
 
 public:
-	Dice();
+	Dice() :Quad() {}//親のコンストラクタを呼ぶ
 	~Dice();
-	virtual HRESULT Initialize();
-	virtual void Draw(Transform& transform);
+	HRESULT Initialize() override;
+	//virtual void Draw(Transform& transform);
+	void InitVertexData() override;
+	void InitIndexData() override;
 };
 

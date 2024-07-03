@@ -5,7 +5,7 @@
 #include "Quad.h"
 #include "Camera.h"
 #include "Dice.h"
-#include "Sprite.h"
+//#include "Sprite.h"
 #include"Transform.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
@@ -70,21 +70,28 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		MessageBox(NULL, L"DirectXの初期化に失敗", NULL, MB_OK);
 		return 0;
 	}
-
+	HRESULT hr2 = Direct3D::Initialize(winW, winH, hWnd);
+	if (FAILED(hr2))
+	{
+		MessageBox(NULL, L"DirectXの初期化に失敗", NULL, MB_OK);
+		return 0;
+	}
 	
 	//Camera::Initialize({5,10,-10}, {0,0,0});
 	Camera::Initialize();
 
-	//Quad* q;
-	//q = new Quad();
+	Quad* q;
+	q = new Quad();
+	hr = q->Initialize();
 	Dice* d;
 	d = new Dice();
-	Sprite* pSprite;
-	pSprite = new Sprite();
+	hr2 = d->Initialize();
+	/*Sprite* pSprite;
+	pSprite = new Sprite();*/
 
 	//hr = q->Initialize();
 	//hr = d->Initialize();
-	hr = pSprite->Load("Assets\\dice.png");
+	//hr = pSprite->Load("Assets\\dice.png");
 
 	if (FAILED(hr))
 	{
@@ -95,6 +102,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
+	
 	while (msg.message != WM_QUIT)
 	{
 		//メッセージあり
@@ -110,13 +118,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//カメラを更新
 			Camera::Update();
 
+			Direct3D::BeginDraw();
 			//XMMATRIX mat = XMMatrixScaling(1 / 2);
-			Transform trs;
-			trs.rotate_.z = 45;
-			trs.position_.x += 0.1;
-			trs.scale_ = { 0.5, 0.5, 1 };
-			pSprite->Draw(trs);
 
+			Transform trs;
+			Transform trs2;
+			trs.rotate_.z += 0.1;
+			trs.position_.y = -2;
+			trs.scale_ = { 0.5, 0.5, 1 };
+			//pSprite->Draw(trs);
+			trs2.rotate_.z += 0.01;
+			trs2.scale_ = { 0.5, 0.5, 1 };
+			q->Draw(trs);
+			d->Draw(trs2);
 			//描画処理
 			Direct3D::EndDraw();
 		}

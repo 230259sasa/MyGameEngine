@@ -132,7 +132,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Dice.cpp" />
-    <ClCompile Include="Direct3d.cpp" />
+    <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
