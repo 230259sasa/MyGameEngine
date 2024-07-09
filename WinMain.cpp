@@ -5,7 +5,7 @@
 #include "Quad.h"
 #include "Camera.h"
 #include "Dice.h"
-//#include "Sprite.h"
+#include "Sprite.h"
 #include"Transform.h"
 //ƒŠƒ“ƒJ
 #pragma comment(lib, "d3d11.lib")
@@ -80,18 +80,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	//Camera::Initialize({5,10,-10}, {0,0,0});
 	Camera::Initialize();
 
-	Quad* q;
+	/*Quad* q;
 	q = new Quad();
-	hr = q->Initialize();
+	hr = q->Initialize();*/
 	Dice* d;
 	d = new Dice();
 	hr2 = d->Initialize();
-	/*Sprite* pSprite;
-	pSprite = new Sprite();*/
+	Sprite* pSprite;
+	pSprite = new Sprite();
 
 	//hr = q->Initialize();
 	//hr = d->Initialize();
-	//hr = pSprite->Load("Assets\\dice.png");
+	hr = pSprite->Initialize("Assets\\FLY_BARD.png");
 
 	if (FAILED(hr))
 	{
@@ -122,15 +122,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//XMMATRIX mat = XMMatrixScaling(1 / 2);
 
 			Transform trs;
-			Transform trs2;
-			trs.rotate_.z += 0.1;
-			trs.position_.y = -2;
-			trs.scale_ = { 0.5, 0.5, 1 };
-			//pSprite->Draw(trs);
-			trs2.rotate_.z += 0.01;
-			trs2.scale_ = { 0.5, 0.5, 1 };
-			q->Draw(trs);
-			d->Draw(trs2);
+			Transform trs1;
+			static float rot = 0;
+			rot += 0.05;
+			trs.rotate_.y += rot;
+			trs.position_.y = 1;
+			trs.scale_ = { 0.5, 0.5, 0.5 };
+			//pSprite->Draw(trs1);
+			//q->Draw(trs);
+			d->Draw(trs);
 			//•`‰æˆ—
 			Direct3D::EndDraw();
 		}

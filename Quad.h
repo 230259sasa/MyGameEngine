@@ -13,7 +13,6 @@ struct CONSTANT_BUFFER
 	XMMATRIX	matW;
 };
 
-//XMFLOAT3Ç≈Ç‡ÇÊÇ¢ÅB
 //í∏ì_èÓïÒ
 struct VERTEX
 {
@@ -50,7 +49,7 @@ protected:
 	HRESULT CreateConstantBuffer();
 	HRESULT LoadTexture(std::string fileName);
 
-	void PassDataToCB(XMMATRIX worldMatrix);
+	void PassDataToCB(Transform& transform);
 	void SetBufferToPipeline();
 };
 

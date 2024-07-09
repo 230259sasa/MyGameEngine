@@ -39,7 +39,8 @@ void Quad::Draw(Transform& transform)
 	Direct3D::SetShader(SHADER_3D);
 	//トランスフォームを計算
 	transform.Calculation();
-	PassDataToCB(transform.GetWorldMatrix());
+	PassDataToCB(transform);
+
 	SetBufferToPipeline();
 	//描画
 	Direct3D::pContext->DrawIndexed(index_.size(), 0, 0);
@@ -156,11 +157,11 @@ HRESULT Quad::LoadTexture(std::string fileName)
 	return S_OK;
 }
 
-void Quad::PassDataToCB(XMMATRIX worldMatrix)
+void Quad::PassDataToCB(Transform& transform)
 {
-	CONSTANT_BUFFER cb;
-	cb.matW = XMMatrixTranspose(worldMatrix); //MATRIXの掛け算のやり方がDirectXと違うので転置をとる（なんそれ）
-	cb.matWVP = XMMatrixTranspose(worldMatrix * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
+	CONSTANT_BUFFER cb; 
+	cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
+	cb.matW = XMMatrixTranspose(transform.GetNormalMatrix()); //MATRIXの掛け算のやり方がDirectXと違うので転置をとる（なんそれ）
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	Direct3D::pContext->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
 	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
