@@ -61,7 +61,9 @@
     <ClInclude Include="Transform.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="FBX.h" />
+    <ClInclude Include="FBX.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="simple3D.hlsl" />

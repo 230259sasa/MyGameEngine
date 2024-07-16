@@ -4,9 +4,10 @@
 
 #include "Quad.h"
 #include "Camera.h"
-#include "Dice.h"
-#include "Sprite.h"
+//#include "Dice.h"
+//#include "Sprite.h"
 #include"Transform.h"
+#include"FBX.h"
 //ÉäÉìÉJ
 #pragma comment(lib, "d3d11.lib")
 
@@ -70,28 +71,31 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		MessageBox(NULL, L"DirectXÇÃèâä˙âªÇ…é∏îs", NULL, MB_OK);
 		return 0;
 	}
-	HRESULT hr2 = Direct3D::Initialize(winW, winH, hWnd);
+	/*HRESULT hr2 = Direct3D::Initialize(winW, winH, hWnd);
 	if (FAILED(hr2))
 	{
 		MessageBox(NULL, L"DirectXÇÃèâä˙âªÇ…é∏îs", NULL, MB_OK);
 		return 0;
-	}
+	}*/
 	
 	//Camera::Initialize({5,10,-10}, {0,0,0});
 	Camera::Initialize();
 
+	FBX fbx;
+	hr = fbx.Load("Assets\\oden.fbx");
+
 	/*Quad* q;
 	q = new Quad();
 	hr = q->Initialize();*/
-	Dice* d;
+	/*Dice* d;
 	d = new Dice();
 	hr2 = d->Initialize();
 	Sprite* pSprite;
-	pSprite = new Sprite();
+	pSprite = new Sprite();*/
 
 	//hr = q->Initialize();
 	//hr = d->Initialize();
-	hr = pSprite->Initialize("Assets\\FLY_BARD.png");
+	//hr = pSprite->Initialize("Assets\\FLY_BARD.png");
 
 	if (FAILED(hr))
 	{
@@ -122,15 +126,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//XMMATRIX mat = XMMatrixScaling(1 / 2);
 
 			Transform trs;
-			Transform trs1;
 			static float rot = 0;
+			static float pos = 0;
+			pos += 0.001;
 			rot += 0.05;
-			trs.rotate_.y += rot;
-			trs.position_.y = 1;
-			trs.scale_ = { 0.5, 0.5, 0.5 };
-			//pSprite->Draw(trs1);
-			//q->Draw(trs);
-			d->Draw(trs);
+			trs.position_ = { 0,1,0 };
+			/*trs.rotate_.y += rot;
+			trs.rotate_.x += rot;
+			trs.rotate_.z += rot;
+			trs.position_.x += 2 * sin(pos);*/
+			/*trs.position_.y = 1;*/
+			//trs.scale_ = { cos(pos), sin(pos), cos(pos) };
+
+			fbx.Draw(trs);
 			//ï`âÊèàóù
 			Direct3D::EndDraw();
 		}
