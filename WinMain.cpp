@@ -131,6 +131,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			pos += 0.001;
 			rot += 0.05;
 			trs.position_ = { 0,1,0 };
+			//trs.rotate_.y = rot;
+			trs.scale_ = { 2,2,2 };
 			/*trs.rotate_.y += rot;
 			trs.rotate_.x += rot;
 			trs.rotate_.z += rot;

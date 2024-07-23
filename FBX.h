@@ -29,23 +29,22 @@ class FBX
 	struct VERTEX
 	{
 		XMVECTOR position;
-		//XMVECTOR uv;
+		XMVECTOR uv;
 		//XMVECTOR normal; //ノーマル追加（法線ベクトル）
 	};
 
 	ID3D11Buffer* pVertexBuffer_;//頂点バッファ用メモリ
-	ID3D11Buffer* pIndexBuffer_;//インデックスバッファ用メモリ
+	ID3D11Buffer** pIndexBuffer_;//インデックスバッファ用メモリ
 	ID3D11Buffer* pConstantBuffer_;//コンスタントバッファ用メモリ
 	std::vector<MATERIAL> pMaterialList_;
+	std::vector<int> indexCount_;
 	int vertexCount_;	//頂点数
 	int polygonCount_;	//ポリゴン数
-	int indexNum_;
+	//int indexNum_;
 	int materialCount_;	//マテリアルの個数
 	void InitVertex(fbxsdk::FbxMesh* mesh);
 	void InitIndex(fbxsdk::FbxMesh* mesh);
 	void InitConstantBuffer();
-	void PassDataToCB(Transform& transform);
-	void SetBufferToPipeline();
 	void InitMaterial(fbxsdk::FbxNode* pNode);
 public:
 	FBX();
