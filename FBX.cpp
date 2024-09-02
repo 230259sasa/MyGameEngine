@@ -2,7 +2,6 @@
 #include"Camera.h"
 #include<filesystem>
 
-
 namespace fs = std::filesystem;
 
 FBX::FBX()
