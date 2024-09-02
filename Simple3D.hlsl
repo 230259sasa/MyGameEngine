@@ -58,7 +58,7 @@ float4 PS(VS_OUT inData) : SV_Target
 {
     //return float4(65 / 255.0, 105 / 255.0, 225 / 255.0, 1); //ピクセルを塗る色
     //float4 myUv = { 0.125, 0.25, 0, 0 };
-    float4 Id = { 1.0, 1.0, 1.0, 1.0 };
+    float4 Id = { 1.0, 1.0, 1.0, 0.0 };
     float4 Kd = g_texture.Sample(g_sampler, inData.uv);
     float cos_alpha = inData.cos_alpha;
     float4 ambentSource = { 0.5, 0.5, 0.5, 1.0 };//環境光の強さ

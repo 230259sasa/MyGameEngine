@@ -129,9 +129,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			static float rot = 0;
 			static float pos = 0;
 			pos += 0.001;
-			rot += 0.05;
+			rot += 0.02;
 			trs.position_ = { 0,1,0 };
-			//trs.rotate_.y = rot;
+			trs.rotate_.y = rot;
 			trs.scale_ = { 2,2,2 };
 			/*trs.rotate_.y += rot;
 			trs.rotate_.x += rot;
