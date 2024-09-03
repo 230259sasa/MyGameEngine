@@ -1,13 +1,13 @@
-class FBX;
-class Stage {
-    FBX* pFbx;
+#pragma once
+#include"Transform.h"
+
+class Controller
+{
+	Transform transform;
 public:
-    //コンストラクタ
-    Stage();
+	Controller();
 
-    //デストラクタ
-    ~Stage();
-
+	~Controller();
     //初期化
     void Initialize();
 
@@ -20,3 +20,4 @@ public:
     //開放
     void Release();
 };
+

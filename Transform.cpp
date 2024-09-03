@@ -21,7 +21,7 @@ Transform::~Transform()
 void Transform::Calculation()
 {
 	//SRT‚Ì‡”Ô‚Å‚©‚¯‚é‚Æƒ[ƒ‹ƒh•ÏŠ·‚É‚È‚é
-	matTranslate_ = XMMatrixTranslation(position_.x, position_.y, position_.y);
+	matTranslate_ = XMMatrixTranslation(position_.x, position_.y, position_.z);
 
 	//Z,X,Y‚Ì‡”Ô‚Ås—ñ‚ð‚©‚¯‚é‚ÆDirectX‚Ì‰ñ“]‚É‚È‚é
 	//digree0>radians XMConvertToRadians()

@@ -8,9 +8,13 @@
 //#include "Sprite.h"
 #include"Transform.h"
 #include"FBX.h"
+#include"Stage.h"
+#include"Input.h"
+#include"Controller.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
 
+Stage* pStage;
 
 	//定数宣言
 	const wchar_t* WIN_CLASS_NAME = L"SampleGame";  //ウィンドウクラス名
@@ -66,12 +70,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	ShowWindow(hWnd, nCmdShow);
 	//Direct3D初期化
 	HRESULT hr = Direct3D::Initialize(winW, winH, hWnd);
+	//DirectInputの初期化
+	Input::Initialize(hWnd);
+
 	if (FAILED(hr))
 	{
 		MessageBox(NULL, L"DirectXの初期化に失敗", NULL, MB_OK);
 		return 0;
 	}
 	Camera::Initialize();
+	pStage = new Stage;
+	pStage->Initialize();
+	Controller* pCont = new Controller;
+	pCont->Initialize();
 
 	if (FAILED(hr))
 	{
@@ -82,7 +93,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
-	
+
 	while (msg.message != WM_QUIT)
 	{
 		//メッセージあり
@@ -90,24 +101,42 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+
 		}
 
 		//メッセージなし
 		else
 		{
+			Input::Update();
+			/*if (Input::IsKeyUp(DIK_ESCAPE))
+			{
+				static int cnt = 0;
+				cnt++;
+				if (cnt >= 3)
+				{
+					PostQuitMessage(0);
+				}
+			}*/
+			
 			//カメラを更新
 			Camera::Update();
+			
+			pCont->Update();
+			pStage->Update();
 
 			Direct3D::BeginDraw();
 
-			//fbx.Draw(trs);
+			pStage->Draw();
+
 			//描画処理
 			Direct3D::EndDraw();
 		}
-		
-	}
 
+	}
+	pStage->Release();
+	SAFE_DELETE(pStage);
 	//SAFE_DELETE(q);
+	Input::Release();
 	Direct3D::Release();
 
 	return 0;
