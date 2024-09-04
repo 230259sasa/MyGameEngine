@@ -1,13 +1,8 @@
 //インクルード
 #include <Windows.h>
-#include "Direct3D.h"
+#include "Engine\\Direct3D.h"
 
-#include "Quad.h"
-#include "Camera.h"
-//#include "Dice.h"
-//#include "Sprite.h"
-#include"Transform.h"
-#include"FBX.h"
+#include "Engine\\Camera.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
 
@@ -71,37 +66,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		MessageBox(NULL, L"DirectXの初期化に失敗", NULL, MB_OK);
 		return 0;
 	}
-	/*HRESULT hr2 = Direct3D::Initialize(winW, winH, hWnd);
-	if (FAILED(hr2))
-	{
-		MessageBox(NULL, L"DirectXの初期化に失敗", NULL, MB_OK);
-		return 0;
-	}*/
-	
-	//Camera::Initialize({5,10,-10}, {0,0,0});
+
 	Camera::Initialize();
-
-	FBX fbx;
-	hr = fbx.Load("Assets\\GreenBox.fbx");
-
-	/*Quad* q;
-	q = new Quad();
-	hr = q->Initialize();*/
-	/*Dice* d;
-	d = new Dice();
-	hr2 = d->Initialize();
-	Sprite* pSprite;
-	pSprite = new Sprite();*/
-
-	//hr = q->Initialize();
-	//hr = d->Initialize();
-	//hr = pSprite->Initialize("Assets\\FLY_BARD.png");
-
-	if (FAILED(hr))
-	{
-		MessageBox(NULL, L"Quadの初期化に失敗", NULL, MB_OK);
-		return 0;
-	}
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -123,31 +89,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			Camera::Update();
 
 			Direct3D::BeginDraw();
-			//XMMATRIX mat = XMMatrixScaling(1 / 2);
-
-			Transform trs;
-			static float rot = 0;
-			static float pos = 0;
-			pos += 0.001;
-			rot += 0.02;
-			trs.position_ = { 0,1,0 };
-			trs.rotate_.y = rot;
-			trs.scale_ = { 2,2,2 };
-			/*trs.rotate_.y += rot;
-			trs.rotate_.x += rot;
-			trs.rotate_.z += rot;
-			trs.position_.x += 2 * sin(pos);*/
-			/*trs.position_.y = 1;*/
-			//trs.scale_ = { cos(pos), sin(pos), cos(pos) };
-
-			fbx.Draw(trs);
+			
 			//描画処理
 			Direct3D::EndDraw();
 		}
-		
 	}
 
-	//SAFE_DELETE(q);
 	Direct3D::Release();
 
 	return 0;

@@ -231,16 +231,6 @@ void FBX::Draw(Transform& transform)
 	Direct3D::SetShader(SHADER_3D);
 	transform.Calculation();
 
-	CONSTANT_BUFFER cb;
-	cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
-	cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
-
-	D3D11_MAPPED_SUBRESOURCE pdata;
-	Direct3D::pContext->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
-	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
-
-	Direct3D::pContext->Unmap(pConstantBuffer_, 0);	//再開
-
 	//頂点バッファ、インデックスバッファ、コンスタントバッファをパイプラインにセット
 	//頂点バッファ
 	UINT stride = sizeof(VERTEX);
@@ -250,6 +240,10 @@ void FBX::Draw(Transform& transform)
 
 	// インデックスバッファーをセット
 	for (int i = 0; i < materialCount_; i++) {
+		CONSTANT_BUFFER cb;
+		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
+		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
+		
 		cb.diffuseColor = pMaterialList_[i].diffuse;
 		if (pMaterialList_[i].pTexture == nullptr) {
 			cb.isTextured = false;
@@ -257,6 +251,12 @@ void FBX::Draw(Transform& transform)
 		else {
 			cb.isTextured = true;
 		}
+
+		D3D11_MAPPED_SUBRESOURCE pdata;
+		Direct3D::pContext->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める
+		memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));	// データを値を送る
+
+		Direct3D::pContext->Unmap(pConstantBuffer_, 0);	//再開
 
 		stride = sizeof(int);
 		offset = 0;
