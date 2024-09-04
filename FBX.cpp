@@ -113,6 +113,7 @@ void FBX::InitIndex(fbxsdk::FbxMesh* mesh)
 {
 	pIndexBuffer_ = new ID3D11Buffer * [materialCount_];
 	//int* index = new int[polygonCount_ * 3];
+	indexCount_ = std::vector<int>(materialCount_);
 	std::vector<int> index(polygonCount_ * 3);
 
 	for (int i = 0; i < materialCount_; i++)
@@ -212,6 +213,10 @@ void FBX::InitMaterial(fbxsdk::FbxNode* pNode)
 		{
 			//this part are witten after
 			pMaterialList_[i].pTexture = nullptr;
+			FbxSurfaceLambert* pMaterial = (FbxSurfaceLambert*)pNode->GetMaterial(i);
+			FbxDouble3 diffuse = pMaterial->Diffuse;
+			pMaterialList_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2],
+				1.0f);
 		}
 
 
@@ -245,6 +250,14 @@ void FBX::Draw(Transform& transform)
 
 	// インデックスバッファーをセット
 	for (int i = 0; i < materialCount_; i++) {
+		cb.diffuseColor = pMaterialList_[i].diffuse;
+		if (pMaterialList_[i].pTexture == nullptr) {
+			cb.isTextured = false;
+		}
+		else {
+			cb.isTextured = true;
+		}
+
 		stride = sizeof(int);
 		offset = 0;
 		Direct3D::pContext->IASetIndexBuffer(pIndexBuffer_[i], DXGI_FORMAT_R32_UINT, 0);

@@ -82,7 +82,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	Camera::Initialize();
 
 	FBX fbx;
-	hr = fbx.Load("Assets\\oden.fbx");
+	hr = fbx.Load("Assets\\GreenBox.fbx");
 
 	/*Quad* q;
 	q = new Quad();
