@@ -1,8 +1,8 @@
 //インクルード
 #include <Windows.h>
 #include "Engine\\Direct3D.h"
-
 #include "Engine\\Camera.h"
+#include"Engine\\RootJob.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
 
@@ -68,6 +68,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	}
 
 	Camera::Initialize();
+	RootJob* pRootJob;
+	pRootJob = new RootJob;
+	pRootJob->Initialize();
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -88,8 +91,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//カメラを更新
 			Camera::Update();
 
+			pRootJob->Update();
+
 			Direct3D::BeginDraw();
 			
+			//pRootJob->Draw();
+
 			//描画処理
 			Direct3D::EndDraw();
 		}
