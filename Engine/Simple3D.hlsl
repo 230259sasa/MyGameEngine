@@ -65,13 +65,13 @@ float4 PS(VS_OUT inData) : SV_Target
     float cos_alpha = inData.cos_alpha;
     float4 ambentSource = { 0.5, 0.5, 0.5, 1.0 };//ŠÂ‹«Œõ‚Ì‹­‚³
     
-    //if (isTextured == false)
-    //{
+    if (isTextured == false)
+    {
         return Id * diffuseColor * cos_alpha + Id * diffuseColor * ambentSource;
-    //}
-    //else
-    //{
-    //    return Id * Kd * cos_alpha + Id * Kd * ambentSource;
-    //}
-   // return g_texture.Sample(g_sampler, myUv);
+    }
+    else
+    {
+        return Id * Kd * cos_alpha + Id * Kd * ambentSource;
+    }
+    //return g_texture.Sample(g_sampler, myUv);
 }

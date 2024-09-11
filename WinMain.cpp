@@ -1,11 +1,13 @@
 //インクルード
+//#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
+#include<cstdlib>
 #include "Engine\\Direct3D.h"
 #include "Engine\\Camera.h"
 #include"Engine\\RootJob.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
-
+#pragma comment(lib, "winmm.lib")
 
 	//定数宣言
 	const wchar_t* WIN_CLASS_NAME = L"SampleGame";  //ウィンドウクラス名
@@ -87,21 +89,48 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
 		//メッセージなし
 		else
-		{
+		{//カッコが1フレーム
+			timeBeginPeriod(1);
+			static DWORD startTime = timeGetTime();
+			DWORD nowTime = timeGetTime();
+			static DWORD countFps = 0;
+			static DWORD lastUpdateTime = nowTime;
+			timeEndPeriod(1);
+			if (nowTime - startTime >= 1000)
+			{
+				std::wstring str;
+				wsprintf(str.data(), L"%u", countFps);
+				SetWindowTextW(hWnd, str.c_str());
+
+				countFps = 0;
+				startTime = nowTime;
+			}
+			if (nowTime - lastUpdateTime <= 1000.0f / 60)
+			{
+				continue;
+			}
+			lastUpdateTime = nowTime;
+			countFps++;
+
+			//std::wstring str;
+			//wsprintf(str.data(), L"%u", nowTime - startTime);
+			//wsprintf(str.data(), L"%u", countFps);
+			//SetWindowTextW(hWnd, str.c_str());
 			//カメラを更新
 			Camera::Update();
 
-			pRootJob->Update();
+			pRootJob->UpdateSub();
 
 			Direct3D::BeginDraw();
 			
-			//pRootJob->Draw();
+			pRootJob->DrawSub();
 
 			//描画処理
 			Direct3D::EndDraw();
 		}
 	}
 
+	pRootJob->ReleaseSub();
 	Direct3D::Release();
 
 	return 0;
