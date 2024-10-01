@@ -1,5 +1,5 @@
 #pragma once
-
+#include"Transform.h"
 #include <dInput.h>
 
 #pragma comment(lib, "dxguid.lib")
@@ -14,4 +14,9 @@ namespace Input {
 	bool IsKeyDown(int keyCode);
 	bool IsKeyUp(int keyCode);
 	void Release();
+	XMVECTOR GetMousePosition();
+	void SetMousePosition(int x, int y);
+	bool IsMouseButton(int buttonCode);
+	bool IsMouseButtonDown(int buttonCode);
+	bool IsMouseButtonUp(int buttonCode);
 }

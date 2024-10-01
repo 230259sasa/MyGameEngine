@@ -11,6 +11,7 @@
 #include"Stage.h"
 #include"Input.h"
 #include"Controller.h"
+#include"resource.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
 
@@ -24,6 +25,7 @@ Stage* pStage;
 
 //プロトタイプ宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 
 //エントリーポイント
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
@@ -38,7 +40,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION); //アイコン
 	wc.hIconSm = LoadIcon(NULL, IDI_WINLOGO);   //小さいアイコン
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);   //マウスカーソル
-	wc.lpszMenuName = NULL;                     //メニュー（なし）
+	wc.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);   //メニュー
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH); //背景（白）
@@ -47,7 +49,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	//ウィンドウサイズの計算
 //（表示領域をWINDOW_WIDTHxWINDOW_HEIGHTに指定するための計算）
 	RECT winRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
-	AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
+	AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, TRUE);
 	int winW = winRect.right - winRect.left;     //ウィンドウ幅
 	int winH = winRect.bottom - winRect.top;     //ウィンドウ高さ
 
@@ -68,6 +70,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
 	//ウィンドウを表示
 	ShowWindow(hWnd, nCmdShow);
+
+	HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1),
+		hWnd, (DLGPROC)DialogProc);
+
 	//Direct3D初期化
 	HRESULT hr = Direct3D::Initialize(winW, winH, hWnd);
 	//DirectInputの初期化
@@ -101,9 +107,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-
 		}
-
+		
 		//メッセージなし
 		else
 		{
@@ -117,7 +122,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 					PostQuitMessage(0);
 				}
 			}*/
-			
+			/*if (Input::IsMouseButtonDown(1)) {
+				PostQuitMessage(0);
+			}*/
 			//カメラを更新
 			Camera::Update();
 			
@@ -131,7 +138,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//描画処理
 			Direct3D::EndDraw();
 		}
-
 	}
 	pStage->Release();
 	SAFE_DELETE(pStage);
@@ -147,9 +153,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_MOUSEMOVE:
+		Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
+		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);  //プログラム終了
 		return 0;
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
+{
+	switch (msg)
+	{
+	case WM_INITDIALOG:
+		//HWND h = GetDlgItem(hDlg,IDC_RADIO_UP);
+		SendMessage(GetDlgItem(hDlg, IDC_RADIO_UP), BM_SETCHECK, BST_CHECKED, 0);
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"デフォルト");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"レンガ");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"草");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"砂");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"水");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_SETCURSEL, 0, 0);
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wp)) {
+		case IDC_RADIO_UP:
+			break;
+		case IDC_RADIO_DOWN:
+			break;
+		case IDC_RADIO_CHANGE:
+			break;
+		case ID_MENU_NEW:
+			break;
+		case ID_MENU_OPEN:
+			break;
+		case ID_MENU_SAVE:
+			break;
+		}
+		break;
+	}
+	return FALSE;
 }
