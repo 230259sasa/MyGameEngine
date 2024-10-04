@@ -1,5 +1,8 @@
 #include "Stage.h"
 #include"Fbx.h"
+#include"Input.h"
+#include"Camera.h"
+//#include "Direct3D.cpp"
 
 Stage::Stage()
 {
@@ -11,28 +14,98 @@ Stage::~Stage()
 
 void Stage::Initialize()
 {
-	pFbx = new FBX;
-	pFbx->Load("Assets/BoxDefault.fbx");
+	std::string path[5] = { "BoxDefault" , "BoxBrick" , "BoxSand" , "BoxWater" , "BoxGrass" };
+	for (int i = 0; i < 5; i++) {
+		pFbx[i] = new FBX;
+		pFbx[i]->Load("Assets/" + path[i] + ".fbx");
+	}
+
+	for (int i = 0; i < 20; i++) {
+		for (int z = 0; z < 20; z++) {
+			table[i][z].height = 1;
+			table[i][z].type = 0;
+		}
+	}
+
+	table[0][0].height = 5;
+	table[3][3].height = 2;
+	table[10][1].height = 3;
+
+	table[0][0].type = 0;
+	table[3][3].type = 0;
+	table[10][1].type = 0;
 }
 
 void Stage::Update()
 {
+	if (Input::IsMouseButtonDown(0)) 
+	{
+		XMMATRIX matView = Camera::GetViewMatrix();
+		XMMATRIX matProj = Camera::GetProjectionMatrix();
+
+		//float w = Direct3D::WINDOW_WIDTH / 2;
+		//float h = Direct3D::WINDOW_HEIGHT / 2;
+		float w = 800 / 2;
+		float h = 600 / 2;
+
+		XMMATRIX vp =
+		{
+			w, 0, 0, 0,
+			0,-h, 0, 0,
+			0, 0, 1, 0,
+			w, h, 0, 1
+		};
+
+		XMMATRIX invView = XMMatrixInverse(nullptr, matView);
+		XMMATRIX invProj = XMMatrixInverse(nullptr, matProj);
+		XMMATRIX invVP = XMMatrixInverse(nullptr, vp);
+
+		////////////////////
+		//XMFLOAT3 mousePos = Input::GetMousePosition();
+		/*XMFLOAT3 mousePos;
+		XMStoreFloat3(&mousePos, Input::GetMousePosition());
+		mousePos.z = 0;
+		XMVECTOR mouseFrontPos = XMLoadFloat3(&mousePos);*/
+		/////////////////
+		XMVECTOR mouseFrontPos = Input::GetMousePosition();
+		XMFLOAT3 mousePos;
+		XMStoreFloat3(&mousePos, mouseFrontPos);
+		mousePos.x = 0;
+		mouseFrontPos = XMLoadFloat3(&mousePos);
+		///////////
+
+		mousePos.x = 1;
+		XMVECTOR mouseBackPos = XMLoadFloat3(&mousePos);
+
+		mouseFrontPos = XMVector3TransformCoord(mouseFrontPos, invVP * invProj * invView);
+		mouseBackPos = XMVector3TransformCoord(mouseBackPos, invVP * invProj * invView);
+
+	}
+
 }
 
 void Stage::Draw()
 {
 	Transform t;
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 20; j++) {
-			t.position_.x = i;
-			t.position_.z = -j;
-			pFbx->Draw(t);
+	for (int x = 0; x < 20; x++) {
+		for (int z = 0; z < 20; z++) {
+			for (int y = 0; y < table[x][z].height; y++) {
+				t.position_.x = x;
+				t.position_.y = y;
+				t.position_.z = z;
+				int type = table[x][z].type;
+				pFbx[type]->Draw(t);
+			}
 		}
 	}
 }
 
 void Stage::Release()
 {
-	pFbx->Release();
-	SAFE_DELETE(pFbx);
+	//pFbx->Release();
+	//SAFE_DELETE(pFbx);
+	for (int i = 0; i < 5; i++) {
+		pFbx[i]->Release();
+		SAFE_DELETE(pFbx[i]);
+	}
 }

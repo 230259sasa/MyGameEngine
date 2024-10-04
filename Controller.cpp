@@ -12,7 +12,7 @@ Controller::~Controller()
 
 void Controller::Initialize()
 {
-	transform.position_ = { 0, 6, -10};
+	transform.position_ = { 0, 8, 20};
 }
 
 void Controller::Update()

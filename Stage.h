@@ -1,6 +1,12 @@
 class FBX;
 class Stage {
-    FBX* pFbx;
+    FBX* pFbx[5];
+    struct Data
+    {
+        int height;
+        int type;
+    };
+    Data table[20][20];
 public:
     //コンストラクタ
     Stage();

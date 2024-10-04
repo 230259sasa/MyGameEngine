@@ -6,6 +6,9 @@
 //変数
 namespace Direct3D
 {
+	const int WINDOW_WIDTH = 800;
+	const int WINDOW_HEIGHT = 600;
+
 	ID3D11Device* pDevice;		//デバイス
 	ID3D11DeviceContext* pContext;		//デバイスコンテキスト
 	IDXGISwapChain* pSwapChain;		//スワップチェイン
@@ -25,6 +28,7 @@ namespace Direct3D
 		ID3D11InputLayout* pVertexLayout = nullptr;	//頂点インプットレイアウト
 		ID3D11RasterizerState* pRasterizerState = nullptr;	//ラスタライザー
 	};
+
 	SHADER_BUNDLE shaderBundle[SHADER_MAX];
 }
 
