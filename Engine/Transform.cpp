@@ -1,12 +1,13 @@
 #include "Transform.h"
 
 Transform::Transform()
-	:position_(0,0,0),
+	:position_(0, 0, 0),
 	rotate_(0, 0, 0),
 	scale_(1, 1, 1),
 	matTranslate_(XMMatrixIdentity()),
 	matRotate_(XMMatrixIdentity()),
-	matScale_(XMMatrixIdentity())
+	matScale_(XMMatrixIdentity()),
+	pParent_(nullptr)
 {
 	/*float x = XMVectorGetX(position_);
 	float y = XMVectorGetY(position_);
@@ -35,7 +36,12 @@ void Transform::Calculation()
 
 XMMATRIX Transform::GetWorldMatrix()
 {
-	return matScale_*matRotate_*matTranslate_;//s*r*t‚ğ‹‚ß‚é
+	if (pParent_ != nullptr) {
+		return matScale_ * matRotate_ * matTranslate_ * pParent_->GetWorldMatrix();
+	}
+	else {
+		return matScale_ * matRotate_ * matTranslate_;//s*r*t‚ğ‹‚ß‚é
+	}
 }
 
 XMMATRIX Transform::GetNormalMatrix()

@@ -28,7 +28,7 @@ namespace Input
 
 	void Update()
 	{
-		memcpy(&prevKeyState,&keyState,sizeof(keyState));
+		memcpy(&prevKeyState, &keyState, sizeof(keyState));
 
 		pKeyDevice->Acquire();
 		pKeyDevice->GetDeviceState(sizeof(keyState), &keyState);

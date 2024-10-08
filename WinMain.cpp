@@ -5,6 +5,7 @@
 #include "Engine\\Direct3D.h"
 #include "Engine\\Camera.h"
 #include"Engine\\RootJob.h"
+#include"Engine\Input.h"
 //リンカ
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "winmm.lib")
@@ -69,6 +70,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 		return 0;
 	}
 
+	Input::Initialize(hWnd);
 	Camera::Initialize();
 	RootJob* pRootJob;
 	pRootJob = new RootJob;
@@ -116,6 +118,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			//wsprintf(str.data(), L"%u", nowTime - startTime);
 			//wsprintf(str.data(), L"%u", countFps);
 			//SetWindowTextW(hWnd, str.c_str());
+			Input::Update();
 			//カメラを更新
 			Camera::Update();
 
@@ -131,6 +134,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	}
 
 	pRootJob->ReleaseSub();
+	Input::Release();
 	Direct3D::Release();
 
 	return 0;
