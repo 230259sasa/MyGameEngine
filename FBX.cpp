@@ -1,7 +1,7 @@
 #include "FBX.h"
 #include"Camera.h"
 #include<filesystem>
-
+#include<DirectXCollision.h>
 
 namespace fs = std::filesystem;
 
@@ -64,7 +64,8 @@ void FBX::InitVertex(fbxsdk::FbxMesh* mesh)
 {
 	//頂点情報を入れる配列
 	//VERTEX* vertices = new VERTEX[vertexCount_];
-	std::vector<VERTEX> vertices(vertexCount_);
+	//std::vector<VERTEX> vertices(vertexCount_);
+	vertices = std::vector<VERTEX>(vertexCount_);
 	//全ポリゴン
 	for (DWORD poly = 0; poly < polygonCount_; poly++)
 	{
@@ -108,11 +109,16 @@ void FBX::InitVertex(fbxsdk::FbxMesh* mesh)
 void FBX::InitIndex(fbxsdk::FbxMesh* mesh)
 {
 	pIndexBuffer_ = new ID3D11Buffer * [materialCount_];
+	//indexCount_ = std::vector<int>(materialCount_);
+	// 
 	//int* index = new int[polygonCount_ * 3];
-	std::vector<int> index(polygonCount_ * 3);
+	//std::vector<int> index(polygonCount_ * 3);
+	index = new std::vector<int>[materialCount_];
 
 	for (int i = 0; i < materialCount_; i++)
 	{
+		index[i] = std::vector<int>(polygonCount_ * 3);
+
 		int count = 0;
 		//全ポリゴン
 		for (DWORD poly = 0; poly < polygonCount_; poly++)
@@ -123,7 +129,7 @@ void FBX::InitIndex(fbxsdk::FbxMesh* mesh)
 				//3頂点分
 				for (DWORD vertex = 0; vertex < 3; vertex++)
 				{
-					index[count] = mesh->GetPolygonVertex(poly, vertex);
+					index[i][count] = mesh->GetPolygonVertex(poly, vertex);
 					count++;
 				}
 			}
@@ -138,7 +144,7 @@ void FBX::InitIndex(fbxsdk::FbxMesh* mesh)
 		bd.MiscFlags = 0;
 
 		D3D11_SUBRESOURCE_DATA InitData;
-		InitData.pSysMem = index.data();
+		InitData.pSysMem = index[i].data();
 		InitData.SysMemPitch = 0;
 		InitData.SysMemSlicePitch = 0;
 
@@ -266,4 +272,25 @@ void FBX::Draw(Transform& transform)
 
 void FBX::Release()
 {
+}
+
+void FBX::RayCast(RayCastData& rayData)
+{
+	XMVECTOR start = XMLoadFloat4(&rayData.start);
+	XMVECTOR dir = XMLoadFloat4(&rayData.dir);
+	dir = XMVector3Normalize(dir);
+
+	for (int material = 0; material < materialCount_; material++) {
+		//3つごとにするので/3
+		for (int poly = 0; poly < indexCount_[material] / 3; poly++) {
+			XMVECTOR v0 = vertices[index[material][poly*3+0]].position;
+			XMVECTOR v1 = vertices[index[material][poly*3+1]].position;
+			XMVECTOR v2 = vertices[index[material][poly*3+2]].position;
+
+			rayData.hit = TriangleTests::Intersects(start, dir, v0, v1, v2, rayData.dist);
+
+			if (rayData.hit)
+				return;
+		}
+	}
 }

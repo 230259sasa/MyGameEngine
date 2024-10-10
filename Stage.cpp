@@ -31,13 +31,18 @@ void Stage::Initialize()
 	table[3][3].height = 2;
 	table[10][1].height = 3;
 
-	table[0][0].type = 0;
-	table[3][3].type = 0;
-	table[10][1].type = 0;
+	table[0][0].type = 2;
+	table[3][3].type = 1;
+	table[10][1].type = 4;
 }
 
 void Stage::Update()
 {
+	/*RayCastData data;
+	data.start = XMFLOAT4(0, 5, 0, 0);
+	data.dir = XMFLOAT4(0, -1, 0, 0);
+	pFbx[0]->RayCast(data);*/
+
 	if (Input::IsMouseButtonDown(0)) 
 	{
 		XMMATRIX matView = Camera::GetViewMatrix();
