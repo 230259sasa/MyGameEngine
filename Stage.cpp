@@ -38,10 +38,17 @@ void Stage::Initialize()
 
 void Stage::Update()
 {
-	/*RayCastData data;
-	data.start = XMFLOAT4(0, 5, 0, 0);
-	data.dir = XMFLOAT4(0, -1, 0, 0);
-	pFbx[0]->RayCast(data);*/
+	//if (Input::IsMouseButtonDown(0))
+	//{
+		RayCastData data;
+		data.start = XMFLOAT4(1, 5, 0, 0);
+		data.dir = XMFLOAT4(0, -1, 0, 0);
+		Transform trans;
+		trans.position_.x = 1;
+		pFbx[0]->RayCast(data, trans);
+	//	if (data.hit)
+	//		MessageBox(NULL, L"ll", NULL, MB_OK);
+	//}
 
 	if (Input::IsMouseButtonDown(0)) 
 	{

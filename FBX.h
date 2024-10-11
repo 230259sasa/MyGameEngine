@@ -63,6 +63,6 @@ public:
 	void    Draw(Transform& transform);
 	void    Release();
 
-	void RayCast(RayCastData& rayData);
+	void RayCast(RayCastData& rayData,Transform& transform);
 };
 
