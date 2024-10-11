@@ -24,6 +24,11 @@ void ChildOden::Initialize()
 void ChildOden::Update()
 {
 	//transform_.rotate_.y++;
+	transform_.position_.y +=0.05;
+
+	if (transform_.position_.y > 4) {
+		KillMe();
+	}
 }
 
 void ChildOden::Draw()
