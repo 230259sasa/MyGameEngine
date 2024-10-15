@@ -35,6 +35,12 @@ public:
 	void SetPosition(float x, float y, float z) {
 		SetPosition(XMFLOAT3(x, y, z));
 	}
+	void SetScale(float x, float y, float z) {
+		transform_.scale_ = { x,y,z };
+	}
+	void SetRotateX(float x) { transform_.rotate_.x = x; }
+	void SetRotateY(float y) { transform_.rotate_.x = y; }
+	void SetRotateZ(float z) { transform_.rotate_.x = z; }
 
 	//template <typename T>‚Æ“¯‚¶‹@”\
 	template <class T>

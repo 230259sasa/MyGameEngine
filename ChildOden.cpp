@@ -1,8 +1,9 @@
 #include "ChildOden.h"
 #include"Engine\FBX.h"
+#include"Engine/Model.h"
 
 ChildOden::ChildOden(GameObject* parent) :
-	GameObject(parent, "child"), pOden(nullptr)
+	GameObject(parent, "child"), hModel(-1)
 {
 }
 
@@ -12,8 +13,9 @@ ChildOden::~ChildOden()
 
 void ChildOden::Initialize()
 {
-	pOden = new FBX;
-	pOden->Load("Assets\\oden.fbx");
+	/*pOden = new FBX;
+	pOden->Load("Assets\\oden.fbx");*/
+	hModel = Model::Load("Assets\\oden.fbx");
 	transform_.scale_.x = 0.4f;
 	transform_.scale_.y = 0.4f;
 	transform_.scale_.z = 0.4f;
@@ -33,7 +35,9 @@ void ChildOden::Update()
 
 void ChildOden::Draw()
 {
-	pOden->Draw(transform_);
+	//pOden->Draw(transform_);
+	Model::SetTransform(hModel,transform_);
+	Model::Draw(hModel);
 }
 
 void ChildOden::Release()

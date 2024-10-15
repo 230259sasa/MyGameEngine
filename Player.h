@@ -7,7 +7,8 @@ class FBX;
 class Player :
     public GameObject
 {
-	FBX* pOden;
+	//FBX* pOden;
+	int hModel;
 public:
 	Player(GameObject* parent);
 	~Player();

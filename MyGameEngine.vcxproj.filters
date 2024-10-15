@@ -62,7 +62,7 @@
     <ClCompile Include="ChildOden.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="Engine\Model.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,7 +100,7 @@
       <Filter>ソース ファイル\Engine</Filter>
     </ClInclude>
     <ClInclude Include="ChildOden.h" />
-    <ClInclude Include="Model.h">
+    <ClInclude Include="Engine\Model.h">
       <Filter>ソース ファイル\Engine</Filter>
     </ClInclude>
   </ItemGroup>

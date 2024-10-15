@@ -196,7 +196,7 @@ void FBX::InitMaterial(fbxsdk::FbxNode* pNode)
 			FbxFileTexture* textureInfo = lProperty.GetSrcObject<FbxFileTexture>(0);
 			const char* textureFilePath = textureInfo->GetRelativeFileName();
 			fs::path texFile(textureFilePath);
-			//ここで存在チェックが必要（あとでやろう）
+			//ここで存在チェックが必要
 			if (fs::is_regular_file(texFile))
 			{
 				pMaterialList_[i].pTexture = new Texture;
