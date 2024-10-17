@@ -25,4 +25,6 @@ public:
 
     //ŠJ•ú
     void Release();
+
+    BOOL DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 };

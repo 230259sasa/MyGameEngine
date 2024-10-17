@@ -2,6 +2,7 @@
 #include"Fbx.h"
 #include"Input.h"
 #include"Camera.h"
+#include"resource.h"
 //#include "Direct3D.cpp"
 
 Stage::Stage()
@@ -131,4 +132,38 @@ void Stage::Release()
 		pFbx[i]->Release();
 		SAFE_DELETE(pFbx[i]);
 	}
+}
+
+BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
+{
+	switch (msg)
+	{
+	case WM_INITDIALOG:
+		//HWND h = GetDlgItem(hDlg,IDC_RADIO_UP);
+		SendMessage(GetDlgItem(hDlg, IDC_RADIO_UP), BM_SETCHECK, BST_CHECKED, 0);
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"デフォルト");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"レンガ");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"草");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"砂");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_ADDSTRING, 0, (LPARAM)L"水");
+		SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_SETCURSEL, 0, 0);
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wp)) {
+		case IDC_RADIO_UP:
+			break;
+		case IDC_RADIO_DOWN:
+			break;
+		case IDC_RADIO_CHANGE:
+			break;
+		case ID_MENU_NEW:
+			break;
+		case ID_MENU_OPEN:
+			break;
+		case ID_MENU_SAVE:
+			break;
+		}
+		break;
+	}
+	return FALSE;
 }
