@@ -134,7 +134,7 @@ void FBX::InitIndex(fbxsdk::FbxMesh* mesh)
 				}
 			}
 		}
-		//indexCount_[i] = count;
+		indexCount_[i] = count;
 		//	（ここもデータサイズを指定するところだけ注意）
 		D3D11_BUFFER_DESC   bd;
 		bd.Usage = D3D11_USAGE_DEFAULT;
@@ -298,6 +298,7 @@ void FBX::RayCast(RayCastData& rayData, Transform& transform)
 	for (int material = 0; material < materialCount_; material++) {
 		//3つごとにするので/3
 		for (int poly = 0; poly < indexCount_[material] / 3; poly++) {
+
 			//local座標なので
 			XMVECTOR v0 = vertices[index[material][poly*3+0]].position;
 			XMVECTOR v1 = vertices[index[material][poly*3+1]].position;
@@ -308,6 +309,8 @@ void FBX::RayCast(RayCastData& rayData, Transform& transform)
 			v1 = XMVector3TransformCoord(v1, transform.GetWorldMatrix());
 			v2 = XMVector3TransformCoord(v2, transform.GetWorldMatrix());*/
 
+			//一か所に当たったらtrueを返している
+			//いずれ総当たりで当たった距離を求める
 			rayData.hit = TriangleTests::Intersects(start, dir, v0, v1, v2, rayData.dist);
 
 			if (rayData.hit)
