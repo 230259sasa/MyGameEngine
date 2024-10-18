@@ -1,7 +1,8 @@
 #include "RootJob.h"
-#include "../PlayScene.h"
+#include "SceneManager.h"
 
-RootJob::RootJob()
+RootJob::RootJob(GameObject* parent):
+	GameObject(parent,"RootJob")
 {
 }
 
@@ -15,7 +16,7 @@ void RootJob::Initialize()
 	pPlayScene = new PlayScene(this);
 	pPlayScene->Initialize();
 	childList_.push_back(pPlayScene);*/
-	Instantiate<PlayScene>(this);
+	Instantiate<SceneManager>(this);
 }
 
 void RootJob::Update()

@@ -1,7 +1,8 @@
 #include "SceneManager.h"
-#include"TestScene.h"
+#include"../TestScene.h"
 
 SceneManager::SceneManager(GameObject* parent)
+	:GameObject(parent,"SceneManager")
 {
 }
 

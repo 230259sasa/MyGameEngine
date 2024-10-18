@@ -16,8 +16,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	hModel = Model::Load("Assets/oden.fbx");
-	GameObject* pCo = Instantiate<ChildOden>(this);
-	pCo->SetPosition(0,0,-1);
+	Instantiate<ChildOden>(this);
 }
 
 void Player::Update()
