@@ -34,6 +34,9 @@ void Stage::Initialize()
 
 	table[3][3].type = 1;
 	table[10][1].type = 4;
+
+	selectMode = 0;
+	selectType = 0;
 }
 
 void Stage::Update()
@@ -97,8 +100,18 @@ void Stage::Update()
 					pFbx[table[x][z].type]->RayCast(data, trans);
 
 					if (data.hit == true) {
-						table[x][z].height++;
+						if (selectMode == SELECT_MODE::Up) {
+							table[x][z].height++;
+						}
+						else if (selectMode == SELECT_MODE::Down) {
+							table[x][z].height += (table[x][z].height == 1) ? 0 : -1;
+						}
+						else if (selectMode == SELECT_MODE::Change) {
+							table[x][z].type = selectType;
+						}
+						
 						//Ç¢Ç∏ÇÍëçìñÇΩÇËÇ≈ìñÇΩÇ¡ÇΩãóó£Ç™àÍî‘è¨Ç≥Ç¢ÉuÉçÉbÉNÇÃÇ›ÇëÄçÏÇ∑ÇÈ
+						//data.distÇ™ãóó£
 						return;
 					}
 				}
@@ -151,16 +164,22 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_COMMAND:
 		switch (LOWORD(wp)) {
 		case IDC_RADIO_UP:
+			selectMode = 0;
 			break;
 		case IDC_RADIO_DOWN:
+			selectMode = 1;
 			break;
 		case IDC_RADIO_CHANGE:
+			selectMode = 2;
 			break;
 		case ID_MENU_NEW:
 			break;
 		case ID_MENU_OPEN:
 			break;
 		case ID_MENU_SAVE:
+			break;
+		case IDC_COMBO:
+			selectType = (int)SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_GETCURSEL,0,0);
 			break;
 		}
 		break;

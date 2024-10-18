@@ -1,3 +1,5 @@
+#include <Windows.h>
+
 class FBX;
 class Stage {
     FBX* pFbx[5];
@@ -7,6 +9,15 @@ class Stage {
         int type;
     };
     Data table[20][20];
+
+    enum SELECT_MODE {
+        Up = 0,
+        Down,
+        Change
+    };
+
+    int selectMode;
+    int selectType;
 public:
     //コンストラクタ
     Stage();
