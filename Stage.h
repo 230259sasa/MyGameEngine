@@ -18,6 +18,10 @@ class Stage {
 
     int selectMode;
     int selectType;
+
+    void Save();
+
+    void Open();
 public:
     //コンストラクタ
     Stage();
@@ -36,6 +40,8 @@ public:
 
     //開放
     void Release();
+
+    LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     BOOL DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 };

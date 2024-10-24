@@ -147,6 +147,109 @@ void Stage::Release()
 	}
 }
 
+void Stage::Save()
+{
+	WCHAR fileName[MAX_PATH] = L"無題.map";  //ファイル名を入れる変数
+
+	//「ファイルを保存」ダイアログの設定
+	OPENFILENAME ofn;                         	//名前をつけて保存ダイアログの設定用構造体
+	ZeroMemory(&ofn, sizeof(ofn));            	//構造体初期化
+	ofn.lStructSize = sizeof(OPENFILENAME);   	//構造体のサイズ
+	ofn.lpstrFilter =	TEXT("マップデータ(*.map)\0*.map\0")        //─┬ファイルの種類
+						TEXT("テキストデータ(*.txt)\0*.txt\0")
+						TEXT("すべてのファイル(*.*)\0*.*\0\0");     //─┘
+	ofn.lpstrFile = fileName;               	//ファイル名
+	ofn.nMaxFile = MAX_PATH;               	//パスの最大文字数
+	ofn.Flags = OFN_OVERWRITEPROMPT;   		//フラグ（同名ファイルが存在したら上書き確認）
+	ofn.lpstrDefExt = L"map";                  	//デフォルト拡張子
+
+	//「ファイルを保存」ダイアログ
+	BOOL selFile;
+	selFile = GetSaveFileName(&ofn);
+
+	//キャンセルしたら中断
+	if (selFile == FALSE) return;
+
+
+
+	HANDLE hFile;        //ファイルのハンドル
+	hFile = CreateFile(
+		fileName,                 //ファイル名
+		GENERIC_WRITE,           //アクセスモード（書き込み用）
+		0,                      //共有（なし）
+		NULL,                   //セキュリティ属性（継承しない）
+		CREATE_ALWAYS,           //作成方法
+		FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
+		NULL);                  //拡張属性（なし）
+
+	DWORD dwBytes = 0;  //書き込み位置
+	WriteFile(
+		hFile,                   //ファイルハンドル
+		"LC",                  //保存するデータ（文字列）
+		(DWORD)strlen("LC"),   //書き込む文字数
+		&dwBytes,                //書き込んだサイズを入れる変数
+		NULL);                   //オーバーラップド構造体（今回は使わない）
+
+	CloseHandle(hFile);
+}
+
+void Stage::Open()
+{
+	HANDLE hFile;        //ファイルのハンドル
+	hFile = CreateFile(
+		L"test.txt",                 //ファイル名
+		GENERIC_READ,           //アクセスモード（読み込み用）
+		0,                      //共有（なし）
+		NULL,                   //セキュリティ属性（継承しない）
+		OPEN_EXISTING,           //作成方法
+		FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
+		NULL);                  //拡張属性（なし）
+
+	//ファイルのサイズを取得
+	DWORD fileSize = GetFileSize(hFile, NULL);
+
+	//ファイルのサイズ分メモリを確保
+	char* data;
+	data = new char[fileSize];
+
+	DWORD dwBytes = 0; //読み込み位置
+
+	ReadFile(
+		hFile,     //ファイルハンドル
+		data,      //データを入れる変数
+		fileSize,  //読み込むサイズ
+		&dwBytes,  //読み込んだサイズ
+		NULL);     //オーバーラップド構造体（今回は使わない）
+
+	CloseHandle(hFile);
+}
+
+LRESULT Stage::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+	case WM_MOUSEMOVE:
+		Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
+		return 0;
+	case WM_DESTROY:
+		PostQuitMessage(0);  //プログラム終了
+		return 0; 
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case ID_MENU_NEW:
+			break;
+		case ID_MENU_OPEN:
+			Open();
+			break;
+		case ID_MENU_SAVE:
+			Save();
+			break;
+		}
+		return 0;
+	}
+	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
 BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 {
 	switch (msg)
@@ -171,12 +274,6 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 			break;
 		case IDC_RADIO_CHANGE:
 			selectMode = 2;
-			break;
-		case ID_MENU_NEW:
-			break;
-		case ID_MENU_OPEN:
-			break;
-		case ID_MENU_SAVE:
 			break;
 		case IDC_COMBO:
 			selectType = (int)SendMessage(GetDlgItem(hDlg, IDC_COMBO), CB_GETCURSEL,0,0);
