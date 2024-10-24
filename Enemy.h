@@ -12,6 +12,5 @@ public:
     void Draw() override;
     void Release() override;
 
-    XMFLOAT3 GetPosition() { return transform_.position_; }
 };
 

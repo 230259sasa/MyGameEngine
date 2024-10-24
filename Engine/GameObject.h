@@ -3,6 +3,8 @@
 #include<list>
 #include"Transform.h"
 
+class SphereCollider;
+
 class GameObject
 {
 private:
@@ -12,6 +14,7 @@ protected:
 	Transform	transform_;
 	GameObject*	pParent_;
 	std::string	objectName_;
+	SphereCollider* pCollider_;
 public:
 	GameObject();
 	GameObject(GameObject* parent, const std::string& name);
@@ -21,7 +24,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	virtual void Release() = 0;
-
+	
 	void UpdateSub();
 	void DrawSub();
 	void ReleaseSub();
@@ -42,9 +45,16 @@ public:
 	void SetRotateY(float y) { transform_.rotate_.x = y; }
 	void SetRotateZ(float z) { transform_.rotate_.x = z; }
 
+	XMFLOAT3 GetPosition() { return transform_.position_; }
+
 	GameObject* FindObject(std::string objName);
 	GameObject* GetRootJob();
 	GameObject* FindChildObject(std::string objName);
+
+	void AddCollider(SphereCollider* pColl);
+	void Collision(GameObject* pTarget);
+	void RoundRobin(GameObject* pTarget);
+	virtual void OnCollision(GameObject* pTarget) {};
 
 	//template <typename T>‚Æ“¯‚¶‹@”\
 	template <class T>

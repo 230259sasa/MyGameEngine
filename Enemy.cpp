@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include"Engine\Model.h"
+#include"Engine\SphereCollider.h"
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent,"Enemy")
@@ -15,6 +16,8 @@ void Enemy::Initialize()
 	transform_.position_.y = 3;
 
 	hModel = Model::Load("Assets\\BoxDefault.fbx");
+	SphereCollider* col = new SphereCollider(0.5);
+	AddCollider(col);
 }
 
 void Enemy::Update()
