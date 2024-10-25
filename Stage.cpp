@@ -4,6 +4,9 @@
 #include"Camera.h"
 #include"resource.h"
 //#include "Direct3D.cpp"
+#include<sstream>
+#include<string>
+#include<iostream>
 
 Stage::Stage()
 {
@@ -170,8 +173,6 @@ void Stage::Save()
 	//キャンセルしたら中断
 	if (selFile == FALSE) return;
 
-
-
 	HANDLE hFile;        //ファイルのハンドル
 	hFile = CreateFile(
 		fileName,                 //ファイル名
@@ -183,10 +184,22 @@ void Stage::Save()
 		NULL);                  //拡張属性（なし）
 
 	DWORD dwBytes = 0;  //書き込み位置
+
+	std::stringstream data;
+	
+	for (auto& itr:table) {
+		for (auto& it:itr) {
+			data << it.height << "," << it.type << ",";
+		}
+	}
+	std::string str = data.str();
+	char* c = new char[str.size() + 1]; // メモリ確保
+	std::char_traits<char>::copy(c, str.c_str(), str.size() + 1);
+
 	WriteFile(
 		hFile,                   //ファイルハンドル
-		"LC",                  //保存するデータ（文字列）
-		(DWORD)strlen("LC"),   //書き込む文字数
+		c,                  //保存するデータ（文字列）
+		(DWORD)strlen(c),   //書き込む文字数
 		&dwBytes,                //書き込んだサイズを入れる変数
 		NULL);                   //オーバーラップド構造体（今回は使わない）
 
@@ -195,9 +208,31 @@ void Stage::Save()
 
 void Stage::Open()
 {
+	WCHAR fileName[MAX_PATH] = L"無題.map";  //ファイル名を入れる変数
+
+	//「ファイルを保存」ダイアログの設定
+	OPENFILENAME ofn;                         	//名前をつけて保存ダイアログの設定用構造体
+	ZeroMemory(&ofn, sizeof(ofn));            	//構造体初期化
+	ofn.lStructSize = sizeof(OPENFILENAME);   	//構造体のサイズ
+	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")        //─┬ファイルの種類
+		TEXT("テキストデータ(*.txt)\0*.txt\0")
+		TEXT("すべてのファイル(*.*)\0*.*\0\0");     //─┘
+	ofn.lpstrFile = fileName;               	//ファイル名
+	ofn.nMaxFile = MAX_PATH;               	//パスの最大文字数
+	ofn.Flags = OFN_OVERWRITEPROMPT;   		//フラグ（同名ファイルが存在したら上書き確認）
+	ofn.lpstrDefExt = L"map";                  	//デフォルト拡張子
+
+	//「ファイルを保存」ダイアログ
+	BOOL selFile;
+	selFile = GetOpenFileName(&ofn);
+
+	//キャンセルしたら中断
+	if (selFile == FALSE) return;
+
+
 	HANDLE hFile;        //ファイルのハンドル
 	hFile = CreateFile(
-		L"test.txt",                 //ファイル名
+		fileName,                 //ファイル名
 		GENERIC_READ,           //アクセスモード（読み込み用）
 		0,                      //共有（なし）
 		NULL,                   //セキュリティ属性（継承しない）
@@ -220,6 +255,25 @@ void Stage::Open()
 		fileSize,  //読み込むサイズ
 		&dwBytes,  //読み込んだサイズ
 		NULL);     //オーバーラップド構造体（今回は使わない）
+
+	std::stringstream ss;
+	for (int i = 0; i < strlen(data); i++) {
+		ss << data[i];
+	}
+	std::string s;
+	std::vector<int> tData;
+	while (std::getline(ss, s, ',')) {
+		std::stringstream sData;
+		sData << s;
+		int n;
+		sData >> n;
+		tData.push_back(n);
+	}
+
+	for (int i = 0; i < 400; i++) {
+		table[i / 20][i % 20].height = tData[i*2];
+		table[i / 20][i % 20].type = tData[i*2+1];
+	}
 
 	CloseHandle(hFile);
 }
