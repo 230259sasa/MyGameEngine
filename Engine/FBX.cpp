@@ -229,7 +229,7 @@ void FBX::Draw(Transform& transform)
 {
 	//Quadをアレンジ
 	Direct3D::SetShader(SHADER_3D);
-	transform.Calculation();
+	transform.Calclation();
 
 	//頂点バッファ、インデックスバッファ、コンスタントバッファをパイプラインにセット
 	//頂点バッファ

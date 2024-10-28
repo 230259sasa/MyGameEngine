@@ -16,12 +16,10 @@ Player::~Player()
 void Player::Initialize()
 {
 	hModel = Model::Load("Assets/oden.fbx");
-	//Instantiate<ChildOden>(this);
 }
 
 void Player::Update()
 {
-	//transform_.rotate_.y += 1;
 	if (Input::IsKeyDown(DIK_SPACE)) {
 		GameObject* pCo = Instantiate<ChildOden>(this);
 		if(pCo != nullptr)

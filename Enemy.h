@@ -4,6 +4,7 @@ class Enemy :
     public GameObject
 {
     int hModel;
+    int dtime;
 public:
     Enemy(GameObject* parent);
     ~Enemy();
@@ -11,6 +12,4 @@ public:
     void Update() override;
     void Draw() override;
     void Release() override;
-
 };
-

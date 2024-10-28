@@ -14,7 +14,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	transform_.position_.y = 3;
-
+	dtime = 0;
 	hModel = Model::Load("Assets\\BoxDefault.fbx");
 	SphereCollider* col = new SphereCollider(0.5);
 	AddCollider(col);
@@ -22,12 +22,11 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	static int dt;
-	dt += 10;
+	dtime += 10;
 
-	float nTime = dt / (60.0f * 10.0f) - 2.0f;
+	float nTime = dtime / (60.0f * 15.0f) - 2.0f;
 	float sn = sin(nTime);
-	transform_.position_.x = 4.0f * sn;
+	transform_.position_.x = 8.0f * sn;
 }
 
 void Enemy::Draw()

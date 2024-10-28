@@ -39,20 +39,6 @@ void ChildOden::Update()
 	Enemy* enemy = (Enemy*)FindObject("Enemy");
 	if (enemy == nullptr) { return; }
 	Collision(enemy);
-
-	/*float x = enemy->GetPosition().x - transform_.position_.x;
-	float y = enemy->GetPosition().y - transform_.position_.y;
-	float z = enemy->GetPosition().z - transform_.position_.z;
-	float d = sqrt(x * x + y * y + z * z);
-	if (d < 1) {
-		KillMe();
-	}*/
-	/*XMVECTOR dist = XMVector3Length(
-		XMVectorSet(enemy->GetPosition().x, enemy->GetPosition().y, enemy->GetPosition().z, 1) -
-		XMVectorSet(transform_.position_.x, transform_.position_.y, transform_.position_.z, 1)
-	);
-	float d = XMVectorGetX(dist);*/
-	
 }
 
 void ChildOden::Draw()

@@ -9,6 +9,9 @@ TestScene::TestScene(GameObject* parent)
 
 void TestScene::Initialize()
 {
+	tex = new Sprite();
+	tex->Load("Assets\\FLY_BARD.png");
+	transform_.scale_ = { 0.2,0.2,0.2 };   
 }
 
 void TestScene::Update()
@@ -22,6 +25,7 @@ void TestScene::Update()
 
 void TestScene::Draw()
 {
+	tex->Draw(transform_);
 }
 
 void TestScene::Release()
