@@ -64,6 +64,9 @@ void GameObject::KillMe()
 
 GameObject* GameObject::FindObject(std::string objName)
 {
+	/*GameObject* rootJob = GetRootJob();
+	GameObject* res = rootJob->FindChildObject(objName);
+	return res;*/
 	return GetRootJob()->FindChildObject(objName);
 }
 
