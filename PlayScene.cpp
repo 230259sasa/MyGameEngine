@@ -12,11 +12,6 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
-	/*Player* pPlayer;
-	pPlayer = new Player(this);
-	pPlayer->Initialize();
-	childList_.push_back(pPlayer);*/
-
 	Instantiate<Enemy>(this);
 	Instantiate<Player>(this);
 }

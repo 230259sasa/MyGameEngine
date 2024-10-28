@@ -2,11 +2,11 @@
 //#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
 #include<cstdlib>
-#include "Engine\\Direct3D.h"
-#include "Engine\\Camera.h"
-#include"Engine\\RootJob.h"
-#include"Engine\Input.h"
-#include"Engine/Model.h"
+#include "Direct3D.h"
+#include "Camera.h"
+#include"RootJob.h"
+#include"Input.h"
+#include"Model.h"
 //ƒŠƒ“ƒJ
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "winmm.lib")

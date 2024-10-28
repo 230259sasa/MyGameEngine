@@ -23,7 +23,7 @@ void Player::Update()
 {
 	//transform_.rotate_.y += 1;
 	if (Input::IsKeyDown(DIK_SPACE)) {
-		ChildOden* pCo = Instantiate<ChildOden>(this);
+		GameObject* pCo = Instantiate<ChildOden>(this);
 		if(pCo != nullptr)
 		pCo->SetPosition(transform_.position_);
 	}

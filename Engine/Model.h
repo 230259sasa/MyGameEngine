@@ -9,7 +9,7 @@ namespace Model
 		Transform transform_;
 		std::string filename_;
 		ModelData()
-			:pFbx_(nullptr), filename_("") {};
+			:pFbx_(nullptr), filename_(""),transform_() {};
 	};
 	//model‚ð•Û‘¶‚·‚é”z—ñ
 	int Load(std::string filename);
