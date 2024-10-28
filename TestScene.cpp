@@ -1,5 +1,5 @@
 #include "TestScene.h"
-#include"Engine\Input.h"
+#include"Engine/Input.h"
 #include"Engine\SceneManager.h"
 
 TestScene::TestScene(GameObject* parent)
@@ -13,8 +13,9 @@ void TestScene::Initialize()
 
 void TestScene::Update()
 {
-	if (Input::IsKey(DIK_SPACE)) {
+	if (Input::IsKeyDown(DIK_SPACE)) {
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
+		if (pSM != nullptr)
 		pSM->ChangeScene(SCENE_ID_PLAY);
 	}
 }

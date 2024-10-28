@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include"Direct3D.h"
+#include"SphereCollider.h"
 
 GameObject::GameObject()
 	:pParent_(nullptr)
@@ -7,7 +8,7 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(GameObject* parent, const std::string& name)
-	:pParent_(parent),objectName_(name),isDead_(false)
+	:pParent_(parent),objectName_(name),isDead_(false),pCollider_(nullptr)
 {
 	if (parent != nullptr) {
 		this->transform_.pParent_ = &(parent->transform_);
@@ -91,4 +92,37 @@ GameObject* GameObject::FindChildObject(std::string objName)
 		}
 	}
 	return nullptr;
+}
+
+void GameObject::AddCollider(SphereCollider* pColl)
+{
+	pCollider_ = pColl;
+}
+
+void GameObject::Collision(GameObject* pTarget)
+{
+	if (this->pCollider_ == nullptr || pTarget->pCollider_ == nullptr || this == pTarget)
+		return;
+
+	XMVECTOR me = XMLoadFloat3(&(transform_.position_));
+	XMVECTOR ta = XMLoadFloat3(&(pTarget->transform_.position_));
+	XMVECTOR d = XMVector3Length(me - ta);
+	float dist = XMVectorGetX(d);
+	//“ñ‚Â‚Ì”¼Œa‚ð‡‚í‚¹‚½’l
+	float rDist = pTarget->pCollider_->GetRadius() + this->pCollider_->GetRadius();
+	if (dist <= rDist) {
+		OnCollision(pTarget);
+	}
+}
+
+void GameObject::RoundRobin(GameObject* pTarget)
+{
+	if (this->pCollider_ == nullptr)
+		return;
+	if(pTarget->pCollider_ != nullptr)
+	Collision(pTarget);
+
+	for (auto& itr : pTarget->childList_) {
+		RoundRobin(itr);
+	}
 }
