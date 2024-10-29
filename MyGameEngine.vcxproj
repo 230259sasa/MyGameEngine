@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="ChildOden.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyMaster.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\Direct3D.cpp" />
     <ClCompile Include="Engine\FBX.cpp" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <ClInclude Include="ChildOden.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyMaster.h" />
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\Direct3D.h" />
     <ClInclude Include="Engine\FBX.h" />

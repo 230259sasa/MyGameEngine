@@ -32,7 +32,7 @@ void ChildOden::Update()
 {
 	transform_.position_.y += 0.05;
 	//transform_.rotate_.y++;
-	if (transform_.position_.y > 4) {
+	if (transform_.position_.y > 10) {
 		KillMe();
 	}
 

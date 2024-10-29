@@ -16,6 +16,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	hModel = Model::Load("Assets/oden.fbx");
+	transform_.position_.y = -4;
 }
 
 void Player::Update()
