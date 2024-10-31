@@ -1,9 +1,11 @@
 #pragma once
-#include "Engine\GameObject.h"
+#include"Engine/GameObject.h"
+#include"Engine/Sprite.h"
 
 class PlayScene :
     public GameObject
 {
+	Sprite* tex;
 public:
 	PlayScene(GameObject* parent);
 	~PlayScene();

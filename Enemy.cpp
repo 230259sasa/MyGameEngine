@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include"Engine\Model.h"
 #include"Engine\SphereCollider.h"
+#include"Engine\SceneManager.h"
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent,"Enemy")
@@ -23,10 +24,15 @@ void Enemy::Initialize()
 void Enemy::Update()
 {
 	dtime += 10;
-
-	float nTime = dtime / (60.0f * 15.0f) - 2.0f;
+	transform_.position_.y-=0.01;
+	/*float nTime = dtime / (60.0f * 15.0f) - 2.0f;
 	float sn = sin(nTime);
-	transform_.position_.x = 8.0f * sn;
+	transform_.position_.x = 8.0f * sn;*/
+	if (transform_.position_.y <= -4) {
+		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
+		if (pSM != nullptr)
+			pSM->ChangeScene(SCENE_ID_GAMEOVER);
+	}
 }
 
 void Enemy::Draw()

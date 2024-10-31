@@ -28,7 +28,7 @@ HRESULT Texture::Load(string fileName)
 		return S_FALSE;
 	}
 
-	//サンプラーの設定をしてゆくぅ
+	//サンプラーの設定をしてゆく
 	D3D11_SAMPLER_DESC  SamDesc;
 	ZeroMemory(&SamDesc, sizeof(D3D11_SAMPLER_DESC));
 	SamDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;

@@ -1,20 +1,19 @@
 #pragma once
 #include "Engine\GameObject.h"
-
-namespace EnemyMasterSetting {
-	const int WEIDTH_ENEMYS = 6;
-	const int HEIGHT_ENEMYS = 20;
-}
+#include<vector>
 
 class EnemyMaster :
 	public GameObject
 {
+	float eTimer;
+	int eColumn;
+	std::vector<std::vector<int>> enemys;
 	enum EnemyType {
 		NONE=0,
 		NORMAL
 	};
 public:
-	EnemyMaster();
+	EnemyMaster(GameObject* parent);
 	~EnemyMaster();
 	void Initialize() override;
 	void Update() override;

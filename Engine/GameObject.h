@@ -1,6 +1,7 @@
 #pragma once
 #include<string>
 #include<list>
+#include<vector>
 #include"Transform.h"
 
 class SphereCollider;
@@ -53,6 +54,8 @@ public:
 
 	void AddCollider(SphereCollider* pColl);
 	void Collision(GameObject* pTarget);
+	void Collision(std::string objName);
+	std::list<GameObject*> FindChildObjectList(std::string objName);
 	void RoundRobin(GameObject* pTarget);
 	virtual void OnCollision(GameObject* pTarget) {};
 

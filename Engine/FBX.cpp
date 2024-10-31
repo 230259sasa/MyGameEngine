@@ -81,7 +81,7 @@ void FBX::InitVertex(fbxsdk::FbxMesh* mesh)
 			FbxLayerElementUV* pUV = mesh->GetLayer(0)->GetUVs();
 			int uvIndex = mesh->GetTextureUVIndex(poly, vertex, FbxLayerElement::eTextureDiffuse);
 			FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
-			vertices[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f, 0.0f);
+			vertices[index].uv = XMVectorSet((float)(uv.mData[0]), (float)(1.0f - uv.mData[1]), 0.0f, 0.0f);
 		
 			//頂点の法線
 			FbxVector4 Normal;
@@ -133,7 +133,7 @@ void FBX::InitIndex(fbxsdk::FbxMesh* mesh)
 				}
 			}
 		}
-		//indexCount_[i] = count;
+		indexCount_[i] = count;
 		//	（ここもデータサイズを指定するところだけ注意）
 		D3D11_BUFFER_DESC   bd;
 		bd.Usage = D3D11_USAGE_DEFAULT;
@@ -191,7 +191,7 @@ void FBX::InitMaterial(fbxsdk::FbxNode* pNode)
 		int fileTextureCount = lProperty.GetSrcObjectCount<FbxFileTexture>();
 
 		//テクスチャあり
-		if (fileTextureCount > 0)
+		if (fileTextureCount)
 		{
 			FbxFileTexture* textureInfo = lProperty.GetSrcObject<FbxFileTexture>(0);
 			const char* textureFilePath = textureInfo->GetRelativeFileName();
@@ -231,18 +231,17 @@ void FBX::Draw(Transform& transform)
 	Direct3D::SetShader(SHADER_3D);
 	transform.Calclation();
 
-	//頂点バッファ、インデックスバッファ、コンスタントバッファをパイプラインにセット
-	//頂点バッファ
-	UINT stride = sizeof(VERTEX);
+	
+	/*UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
-	Direct3D::pContext->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);
+	Direct3D::pContext->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);*/
 
+	CONSTANT_BUFFER cb;
+	cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
+	cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 
 	// インデックスバッファーをセット
 	for (int i = 0; i < materialCount_; i++) {
-		CONSTANT_BUFFER cb;
-		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
-		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 		
 		cb.diffuseColor = pMaterialList_[i].diffuse;
 		if (pMaterialList_[i].pTexture == nullptr) {
@@ -258,6 +257,11 @@ void FBX::Draw(Transform& transform)
 
 		Direct3D::pContext->Unmap(pConstantBuffer_, 0);	//再開
 
+		//頂点バッファ、インデックスバッファ、コンスタントバッファをパイプラインにセット
+		//頂点バッファ
+		UINT stride = sizeof(VERTEX);
+		UINT offset = 0;
+		Direct3D::pContext->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);
 		stride = sizeof(int);
 		offset = 0;
 		Direct3D::pContext->IASetIndexBuffer(pIndexBuffer_[i], DXGI_FORMAT_R32_UINT, 0);
@@ -277,7 +281,7 @@ void FBX::Draw(Transform& transform)
 
 		}
 		//描画
-		Direct3D::pContext->DrawIndexed(polygonCount_ * 3, 0, 0);
+		Direct3D::pContext->DrawIndexed(indexCount_[i], 0, 0);
 	}
 }
 

@@ -3,7 +3,10 @@
 
 enum SCENE_ID {
     SCENE_ID_TEST = 0,
+    SCENE_ID_TITLE,
     SCENE_ID_PLAY,
+    SCENE_ID_CLEAR,
+    SCENE_ID_GAMEOVER,
     SCENE_ID_MAX
 };
 

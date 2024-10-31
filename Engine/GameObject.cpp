@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include"Direct3D.h"
 #include"SphereCollider.h"
+#include<Queue>
 
 GameObject::GameObject()
 	:pParent_(nullptr)
@@ -113,6 +114,32 @@ void GameObject::Collision(GameObject* pTarget)
 	if (dist <= rDist) {
 		OnCollision(pTarget);
 	}
+}
+
+void GameObject::Collision(std::string objName)
+{
+	std::list<GameObject*> pTargets = GetRootJob()->FindChildObjectList(objName);
+	for (auto itr : pTargets) {
+		Collision(itr);
+	}
+}
+
+std::list<GameObject*> GameObject::FindChildObjectList(std::string objName)
+{
+	std::list<GameObject*> q;
+	if (objectName_ == objName) {
+		q.push_back(this);
+	}
+	else {
+		for (auto itr : childList_) {
+			std::list<GameObject*> obj = 
+				itr->FindChildObjectList(objName);
+			for (auto i : obj) {
+				q.push_back(i);
+			}
+		}
+	}
+	return q;
 }
 
 void GameObject::RoundRobin(GameObject* pTarget)

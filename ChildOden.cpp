@@ -36,9 +36,9 @@ void ChildOden::Update()
 		KillMe();
 	}
 
-	Enemy* enemy = (Enemy*)FindObject("Enemy");
-	if (enemy == nullptr) { return; }
-	Collision(enemy);
+	//Enemy* enemy = (Enemy*)FindObject("Enemy");
+	//if (enemy == nullptr) { return; }
+	Collision("Enemy");
 }
 
 void ChildOden::Draw()
