@@ -19,7 +19,7 @@ void PlayScene::Initialize()
 	/*Instantiate<Enemy>(this);
 	Enemy* e = Instantiate<Enemy>(this);
 	e->SetPosition(3, 0, 0);*/
-	//Instantiate<Player>(this);
+	Instantiate<Player>(this);
 	Instantiate<EnemyMaster>(this);
 	Camera::SetPosition({ 0,0,-15 });
 }

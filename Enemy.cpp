@@ -24,7 +24,7 @@ void Enemy::Initialize()
 void Enemy::Update()
 {
 	dtime += 10;
-	transform_.position_.y-=0.01;
+	transform_.position_.y-=0.5f/60.0f;
 	/*float nTime = dtime / (60.0f * 15.0f) - 2.0f;
 	float sn = sin(nTime);
 	transform_.position_.x = 8.0f * sn;*/

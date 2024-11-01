@@ -17,10 +17,8 @@ void ChildOden::Initialize()
 {
 	/*pOden = new FBX;
 	pOden->Load("Assets\\oden.fbx");*/
-	hModel = Model::Load("Assets\\oden.fbx");
-	transform_.scale_.x = 0.4f;
-	transform_.scale_.y = 0.4f;
-	transform_.scale_.z = 0.4f;
+	hModel = Model::Load("Assets\\Oden.fbx");
+	transform_.scale_ = { 0.2,0.2,0.2 };
 	transform_.position_.x = 1.0f;
 	transform_.position_.y = 1.0f;
 

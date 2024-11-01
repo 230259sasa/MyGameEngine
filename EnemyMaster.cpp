@@ -5,7 +5,7 @@
 namespace EnemyMasterSetting {
 	const int WEIDTH_ENEMYS = 6;
 	const int HEIGHT_ENEMYS = 4;
-	const float ENEMY_SPAWN_PACE = 0.0f;
+	const float ENEMY_SPAWN_PACE = 4.0f;
 }
 
 namespace EMS = EnemyMasterSetting;
@@ -22,7 +22,7 @@ EnemyMaster::~EnemyMaster()
 void EnemyMaster::Initialize()
 {
 	eColumn = 0;
-	eTimer = EMS::ENEMY_SPAWN_PACE;
+	eTimer = 1.0f;
 	for(int i=0;i<EMS::HEIGHT_ENEMYS;i++){
 		std::vector<int> v;
 		for (int j = 0; j < EMS::WEIDTH_ENEMYS; j++) {
@@ -39,7 +39,7 @@ void EnemyMaster::Update()
 		for (int i = 0; i < EMS::WEIDTH_ENEMYS; i++) {
 			if (enemys[eColumn][i] == 1) {
 				Enemy* e = Instantiate<Enemy>(FindObject("PlayScene"));
-				e->SetPosition({ -6.5f + i * 2.5f,4,0 });
+				e->SetPosition({ -6.5f + i * 2.5f,5,0 });
 			}
 		}
 		eColumn++;
